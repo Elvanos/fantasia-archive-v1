@@ -40,6 +40,7 @@
 
         <Field_Text
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'text' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -49,6 +50,7 @@
 
         <Field_Number
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'number' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -58,6 +60,7 @@
 
         <Field_Switch
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'switch' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -67,6 +70,7 @@
 
         <Field_ColorPicker
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'colorPicker' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -76,6 +80,7 @@
 
         <Field_List
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'list' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -85,6 +90,7 @@
 
         <Field_SingleSelect
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'singleSelect' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -94,6 +100,7 @@
 
         <Field_MultiSelect
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'multiSelect' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -103,6 +110,7 @@
 
         <Field_SingleRelationship
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="(field.type === 'singleToNoneRelationship' || field.type === 'singleToSingleRelationship' || field.type === 'singleToManyRelationship') && categoryFieldFilter(field.id)"
         :quickInsertMode="quickInsertMode"
         :inputDataBluePrint="field"
@@ -120,6 +128,7 @@
 
         <Field_MultiRelationship
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="(field.type === 'manyToNoneRelationship' || field.type ===
         'manyToSingleRelationship' || field.type === 'manyToManyRelationship') && categoryFieldFilter(field.id)"
         :quickInsertMode="quickInsertMode"
@@ -138,6 +147,7 @@
 
         <Field_Wysiwyg
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'wysiwyg' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="(retrieveFieldValue(localDocument, field.id)) ? retrieveFieldValue(localDocument, field.id) : ''"
@@ -148,6 +158,7 @@
 
         <Field_Tags
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'tags' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -187,6 +198,7 @@
 
         <Field_Text
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'text' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -196,6 +208,7 @@
 
         <Field_Number
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'number' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -205,6 +218,7 @@
 
         <Field_Switch
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'switch' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -214,6 +228,7 @@
 
         <Field_ColorPicker
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'colorPicker' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -223,6 +238,7 @@
 
         <Field_List
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'list' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -232,6 +248,7 @@
 
         <Field_SingleSelect
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'singleSelect' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -241,6 +258,7 @@
 
         <Field_MultiSelect
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'multiSelect' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"
@@ -250,6 +268,7 @@
 
         <Field_SingleRelationship
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="(field.type === 'singleToNoneRelationship' || field.type === 'singleToSingleRelationship' || field.type === 'singleToManyRelationship') && categoryFieldFilter(field.id)"
         :quickInsertMode="quickInsertMode"
         :inputDataBluePrint="field"
@@ -263,6 +282,7 @@
 
         <Field_MultiRelationship
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="(field.type === 'manyToNoneRelationship' || field.type ===
         'manyToSingleRelationship' || field.type === 'manyToManyRelationship') && categoryFieldFilter(field.id)"
         :quickInsertMode="quickInsertMode"
@@ -277,6 +297,7 @@
 
         <Field_Wysiwyg
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'wysiwyg' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="(retrieveFieldValue(localDocument, field.id)) ? retrieveFieldValue(localDocument, field.id) : ''"
@@ -287,6 +308,7 @@
 
         <Field_Tags
         class="inputWrapper"
+        :class="'field-'+field.id+'-'+localDocument._id"
         v-if="field.type === 'tags' && categoryFieldFilter(field.id)"
         :inputDataBluePrint="field"
         :inputDataValue="retrieveFieldValue(localDocument, field.id)"

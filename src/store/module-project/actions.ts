@@ -10,6 +10,10 @@ const actions: ActionTree<ProjectInterface, StateInterface> = {
 
   setProjectName (state, input: string) {
     state.commit("setProjectName", input)
+  },
+
+  setProjectCustomCSS (state, input: string) {
+    state.commit("setProjectCustomCSS", input)
   }
 }
 

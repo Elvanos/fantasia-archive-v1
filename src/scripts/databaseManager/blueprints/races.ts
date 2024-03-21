@@ -65,7 +65,7 @@ export const racesBlueprint: I_Blueprint = {
       tooltip:
         `This setting allows for setting the current document to finished document mode.
         <br>
-        A document with finished document mode toggled on will not show any un-filled fields in view mode and will function as if "Hide empty fields" was turned on in the settings.      
+        A document with finished document mode toggled on will not show any un-filled fields in view mode and will function as if "Hide empty fields" was turned on in the settings.
         `,
       sizing: 2
     },
@@ -156,6 +156,18 @@ export const racesBlueprint: I_Blueprint = {
         to another one and then back to this one.
         `,
       sizing: 4
+    },
+    {
+      id: "extraClasses",
+      name: "Extra HTML classes",
+      type: "text",
+      icon: "mdi-language-css3",
+      tooltip:
+        `This field exists for advanced usage by power-users who wish to style their document with globally defined CSS classes.
+        <br>
+        Settings are found inside "Project->Advanced project tools->Custom CSS".
+        `,
+      sizing: 12
     },
     {
       id: "otherNames",

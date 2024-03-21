@@ -45,6 +45,12 @@
       @trigger-dialog-close="mergeProjectDialogClose"
     />
 
+    <!-- Merge project dialog -->
+    <customCssEditorDialog
+      :dialog-trigger="customCssEditorDialogTrigger"
+      @trigger-dialog-close="customCssEditorDialogClose"
+    />
+
     <!-- New project dialog -->
     <newProjectCheckDialog
       :dialog-trigger="newProjectDialogTrigger"
@@ -286,6 +292,21 @@
                     <q-item-section>Merge another project into the current one</q-item-section>
                     <q-item-section avatar>
                       <q-icon name="mdi-folder-plus-outline" />
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item
+                    v-close-popup
+                    clickable
+                    active
+                    active-class="bg-gunmetal-light text-cultured"
+                    class="noHigh"
+                    @click="customCssEditorAssignUID"
+                    :disable="!projectExists"
+                  >
+                    <q-item-section>Custom CSS editor</q-item-section>
+                    <q-item-section avatar>
+                      <q-icon name="mdi-language-css3" />
                     </q-item-section>
                   </q-item>
 
@@ -579,6 +600,7 @@ import licenseDialog from "src/components/dialogs/License.vue"
 import exportProjectDialog from "src/components/dialogs/ExportProject.vue"
 import massDeleteDocumentsCheckDialog from "src/components/dialogs/MassDeleteDocumentsCheck.vue"
 import projectSettingsdDialog from "src/components/dialogs/ProjectSettings.vue"
+import customCssEditorDialog from "src/components/dialogs/CustomCssEditor.vue"
 
 import { Loading, QSpinnerGears } from "quasar"
 import { saveProject } from "src/scripts/projectManagement/projectManagent"
@@ -606,7 +628,8 @@ import appSearchBox from "src/components/appHeader/AppSearchBox.vue"
     repairProjectDialog,
     exportProjectDialog,
     massDeleteDocumentsCheckDialog,
-    projectSettingsdDialog
+    projectSettingsdDialog,
+    customCssEditorDialog
   }
 })
 export default class AppControl extends BaseClass {
@@ -687,6 +710,11 @@ export default class AppControl extends BaseClass {
     // Tohhle dev tools
     if (this.determineKeyBind("toggleDeveloperTools")) {
       this.toggleDevTools()
+    }
+
+    // Tohhle custom CSS editor
+    if (this.determineKeyBind("openCustomCssEditor")) {
+      this.customCssEditorAssignUID()
     }
   }
 
@@ -769,6 +797,19 @@ export default class AppControl extends BaseClass {
 
   mergeProjectAssignUID () {
     this.mergeProjectDialogTrigger = this.generateUID()
+  }
+
+  /****************************************************************/
+  // Custom CSS editor dialog
+  /****************************************************************/
+
+  customCssEditorDialogTrigger: string | false = false
+  customCssEditorDialogClose () {
+    this.customCssEditorDialogTrigger = false
+  }
+
+  customCssEditorAssignUID () {
+    this.customCssEditorDialogTrigger = this.generateUID()
   }
 
   /****************************************************************/

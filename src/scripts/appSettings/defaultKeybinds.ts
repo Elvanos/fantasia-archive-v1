@@ -387,5 +387,16 @@ export const defaultKeybinds = [
     editable: true,
     id: "toggleDeveloperTools",
     tooltip: "Toggles the developer tools on/off"
+  },
+
+  // Open custom CSS editor - CTRL + SHIFT + ALT + L
+  {
+    altKey: true,
+    ctrlKey: true,
+    shiftKey: true,
+    which: 76,
+    editable: true,
+    id: "openCustomCssEditor",
+    tooltip: "Opens the custom CSS editor"
   }
 ]

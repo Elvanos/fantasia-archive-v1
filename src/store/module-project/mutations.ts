@@ -9,6 +9,10 @@ const mutation: MutationTree<ProjectInterface> = {
 
   setProjectName (state: ProjectInterface, input: string) {
     state.projectName = input
+  },
+
+  setProjectCustomCSS (state: ProjectInterface, input: string) {
+    state.projectCustomCSS = input
   }
 
 }

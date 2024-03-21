@@ -78,7 +78,7 @@ export const saveProject = (projectName: string, Loading: any, loadingSetup: any
       }
 
       Loading.show(loadingSetup)
-    
+
       PouchDB.plugin(replicationStream.plugin)
       // @ts-ignore
       PouchDB.adapter("writableStream", replicationStream.adapters.writableStream)
@@ -257,7 +257,7 @@ export const mergeExistingProject = (vueRouter: any, Loading: any, loadingSetup:
       await window.FA_dbs[currentDBName].loadIt(fileContents)
     }
 
-    
+
     const optionsSnapShot = extend(true, {}, vueInstance.SGET_options)
     // @ts-ignore
     optionsSnapShot.legacyFieldsCheck018 = true
@@ -324,9 +324,9 @@ export const retrieveCurrentProjectName = async () => {
 }
 
 /**
- * Change current project name
+ * Retrieves current project custom CSS
  */
-export const changeCurrentProjectSettings = async (input: {projectName: string}) => {
+export const retrieveCurrentProjectCustomCSS = async () => {
   if (!window.FA_dbs) {
     // @ts-ignore
     window.FA_dbs = {}
@@ -335,7 +335,37 @@ export const changeCurrentProjectSettings = async (input: {projectName: string})
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const projectData = await window.FA_dbs["project-data"].allDocs({ include_docs: true })
 
-  projectData.rows[0].doc.projectName = input.projectName
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
+  const projectCustomCSS: string = projectData?.rows[0]?.doc?.projectCustomCSS
+
+  return (projectCustomCSS) || ""
+}
+
+/**
+ * Change current project name
+ */
+export const changeCurrentProjectSettings = async (input: {
+  projectName?: string,
+  projectCustomCSS?: string
+}) => {
+  if (!window.FA_dbs) {
+    // @ts-ignore
+    window.FA_dbs = {}
+  }
+  window.FA_dbs["project-data"] = new PouchDB("project-data")
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const projectData = await window.FA_dbs["project-data"].allDocs({ include_docs: true })
+
+  if (input.projectName) {
+    projectData.rows[0].doc.projectName = input.projectName
+  }
+
+  if (input.projectCustomCSS) {
+    projectData.rows[0].doc.projectCustomCSS = input.projectCustomCSS
+  }
+
+  console.log(projectData.rows[0].doc)
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   await window.FA_dbs["project-data"].put(projectData.rows[0].doc)

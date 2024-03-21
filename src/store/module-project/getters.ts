@@ -13,6 +13,10 @@ const getters: GetterTree<ProjectInterface, StateInterface> = {
 
   getProjectName (context) {
     return context.projectName
+  },
+
+  getProjectCustomCSS (context) {
+    return context.projectCustomCSS
   }
 }
 

@@ -68,6 +68,9 @@ export default class BaseClass extends Vue {
   @Project.Getter("getProjectName") SGET_getProjectName!: string
   @Project.Action("setProjectName") SSET_setProjectName!: (input: string) => void
 
+  @Project.Getter("getProjectCustomCSS") SGET_getProjectCustomCSS!: string
+  @Project.Action("setProjectCustomCSS") SSET_setProjectCustomCSS!: (input: string) => void
+
   /****************************************************************/
   // FLOATING WINDOWS
   /****************************************************************/

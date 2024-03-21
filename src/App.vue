@@ -1,5 +1,8 @@
 <template>
   <div id="q-app">
+
+    <component v-bind:is="'style'" type="text/css" v-html="customCSS"></component>
+
     <appWindowButtons />
     <router-view />
 
@@ -103,7 +106,7 @@ import { OptionsStateInteface } from "./store/module-options/state"
 import { colors } from "quasar"
 import { tipsTricks } from "src/scripts/utilities/tipsTricks"
 import { summonAllPlusheForms } from "src/scripts/utilities/plusheMascot"
-import { saveCorkboard, retrieveCorkboard, retrieveCurrentProjectName } from "src/scripts/projectManagement/projectManagent"
+import { saveCorkboard, retrieveCorkboard, retrieveCurrentProjectName, retrieveCurrentProjectCustomCSS } from "src/scripts/projectManagement/projectManagent"
 import documentPreview from "src/components/DocumentPreview.vue"
 @Component({
   components: {
@@ -136,6 +139,11 @@ export default class App extends BaseClass {
     const currentProjectName = await retrieveCurrentProjectName()
 
     this.SSET_setProjectName(currentProjectName)
+
+    // eslint-disable-next-line prefer-const
+    const currentProjectCustomCSS = await retrieveCurrentProjectCustomCSS()
+
+    this.SSET_setProjectCustomCSS(currentProjectCustomCSS)
 
     // Load the popup hint on
     this.loadHintPopup()
@@ -466,6 +474,19 @@ export default class App extends BaseClass {
     if (this.determineKeyBind("toggleNoteCorkboard")) {
       this.corkboardWindowVisible = !this.corkboardWindowVisible
     }
+  }
+
+  /****************************************************************/
+  // CUSTOM CSS ATTACHING
+  /****************************************************************/
+
+  customCSS = ""
+
+  @Watch("SGET_getProjectCustomCSS", { deep: true })
+  checkCustomCSS () {
+    this.customCSS = this.SGET_getProjectCustomCSS
+
+    console.log(this.customCSS)
   }
 }
 </script>

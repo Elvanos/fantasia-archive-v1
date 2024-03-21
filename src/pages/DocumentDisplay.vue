@@ -1,10 +1,12 @@
 <template>
   <q-page
   class="documentDisplay"
+  :id="'document-'+currentData._id"
   :class="{
     'q-pb-xl q-pl-xl q-pr-xl': disableDocumentControlBar,
     'q-pa-xl': !disableDocumentControlBar,
-    'hiddenFields': (hideEmptyFields || retrieveFieldValue(currentData, 'finishedSwitch'))
+    'hiddenFields': (hideEmptyFields || retrieveFieldValue(currentData, 'finishedSwitch')),
+    [extraClasses]: extraClasses
     }"
   v-if="bluePrintData"
   >
@@ -212,6 +214,7 @@
 
           <Field_Break
           class="inputWrapper break"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'break' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -219,6 +222,7 @@
 
           <Field_Text
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'text' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -229,6 +233,7 @@
 
           <Field_Number
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'number' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -239,6 +244,7 @@
 
           <Field_Switch
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'switch' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -249,6 +255,7 @@
 
           <Field_ColorPicker
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'colorPicker' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -259,6 +266,7 @@
 
           <Field_List
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'list' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -269,6 +277,7 @@
 
           <Field_SingleSelect
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'singleSelect' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -279,6 +288,7 @@
 
           <Field_MultiSelect
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'multiSelect' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -289,6 +299,7 @@
 
           <Field_SingleRelationship
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="(field.type === 'singleToNoneRelationship' || field.type === 'singleToSingleRelationship' || field.type === 'singleToManyRelationship') && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -300,6 +311,7 @@
 
           <Field_MultiRelationship
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="(field.type === 'manyToNoneRelationship' || field.type ===
           'manyToSingleRelationship' || field.type === 'manyToManyRelationship') && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
@@ -312,6 +324,7 @@
 
           <Field_Wysiwyg
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'wysiwyg' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="(retrieveFieldValue(currentData, field.id)) ? retrieveFieldValue(currentData, field.id) : ''"
@@ -323,6 +336,7 @@
 
           <Field_Tags
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'tags' && categoryFieldFilter(field.id)"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -333,6 +347,7 @@
 
           <Field_DocumentTemplate
           class="inputWrapper"
+          :class="'field-'+field.id+'-'+currentData._id"
           v-if="field.type === 'documentTemplate'"
           :inputDataBluePrint="field"
           :inputDataValue="retrieveFieldValue(currentData, field.id)"
@@ -471,6 +486,8 @@ export default class PageDocumentDisplay extends BaseClass {
    */
   localDataCopy = false as unknown as I_OpenedDocument
 
+  extraClasses = ""
+
   /****************************************************************/
   // DOCUMENT FUNCTIONALITY
   /****************************************************************/
@@ -576,6 +593,9 @@ export default class PageDocumentDisplay extends BaseClass {
 
     // Either create a new document or load existing one
     this.currentData = (retrievedObject) ? extend(true, [], retrievedObject) : this.createNewDocumentObject()
+
+    // @ts-ignore
+    this.extraClasses = (this.retrieveFieldValue(this.currentData, "extraClasses")) ? this.retrieveFieldValue(this.currentData, "extraClasses") : ""
 
     if (!this.currentData) {
       this.$router.push({ path: "/project" }).catch((e: {name: string}) => {
