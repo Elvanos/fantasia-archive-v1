@@ -485,8 +485,6 @@ export default class App extends BaseClass {
   @Watch("SGET_getProjectCustomCSS", { deep: true })
   checkCustomCSS () {
     this.customCSS = this.SGET_getProjectCustomCSS
-
-    console.log(this.customCSS)
   }
 }
 </script>
