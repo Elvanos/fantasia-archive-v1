@@ -99,10 +99,16 @@ export const saveProject = (projectName: string, Loading: any, loadingSetup: any
           fs.mkdirSync(`${folderPath}`)
         }
 
-        if (!fs.existsSync(`${folderPath}/${projectName}`)) {
-          fs.mkdirSync(`${folderPath}/${projectName}`)
+        // Check if this is a nested folder or not
+        const isProjectFolder = fs.existsSync(`${folderPath}/project-data.txt`)
+        const projectPath = (isProjectFolder)
+          ? `${folderPath}`
+          : `${folderPath}/${projectName}`
+
+        if (!fs.existsSync(projectPath)) {
+          fs.mkdirSync(projectPath)
         }
-        const ws = fs.createWriteStream(`${folderPath}/${projectName}/${db}.txt`)
+        const ws = fs.createWriteStream(`${projectPath}/${db}.txt`)
 
         // @ts-ignore
         await window.FA_dbs[db].dump(ws)
