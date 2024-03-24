@@ -39,13 +39,13 @@
       class="connectionList"
       dense>
       <div
-        v-for="single in localInput"
-        :key="single._id"
+        v-for="(singleNote,index) in inputNotes"
+        :key="index"
         class="relationsViewList"
       >
          <div
           class="relationshipOpeningButton q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-primary q-btn--actionable q-focusable q-hoverable q-btn--wrap q-btn--dense"
-          @click.stop.prevent.left="openNewTab(single)"
+          @click.stop.prevent.left="openNewTab(localInput[index])"
           v-ripple
         >
         <span class="q-focus-helper"></span>
@@ -61,7 +61,7 @@
         <div
           v-if="recursive || sideDocumentPreview"
           class="relationshipChangeParent q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round text-primary q-btn--actionable q-focusable q-hoverable q-btn--wrap q-btn--dense"
-          @click.stop.prevent.left="setNewParentId(single._id)"
+          @click.stop.prevent.left="setNewParentId(localInput[index]._id)"
           v-ripple
         >
         <span class="q-focus-helper"></span>
@@ -82,23 +82,23 @@
       >
         <documentPreview
           v-if="!recursive && !preventPreviewsDocuments"
-          :document-id="single._id"
+          :document-id="localInput[index]._id"
           :external-close-trigger="documentPreviewClose"
         />
         <q-item-section
-          @click.stop.prevent.left="openExistingDocumentRoute(single)"
-          @click.stop.prevent.middle="openNewTab(single)"
+          @click.stop.prevent.left="openExistingDocumentRoute(localInput[index])"
+          @click.stop.prevent.middle="openNewTab(localInput[index])"
           >
             <span class="text-weight-medium">
-              <span class="isDeadIndicator" v-if="single.isDead">
+              <span class="isDeadIndicator" v-if="localInput[index].isDead">
                 †
               </span>
-              <span :class="{'isDead': (single.isDead && !hideDeadCrossThrough)}">
-                  {{stripTags(single.label)}}
+              <span :class="{'isDead': (localInput[index].isDead && !hideDeadCrossThrough)}">
+                  {{stripTags(localInput[index].label)}}
               </span>
             </span>
             <span class="inline-block q-ml-xs text-italic connectionNote">
-              {{retrieveNoteText(single._id)}}
+              {{singleNote.value}}
             </span>
 
         </q-item-section>
@@ -119,57 +119,57 @@
           <q-list class="bg-gunmetal-light text-accent">
 
             <template>
-              <q-item clickable  @click="copyName(fixGetCorrectDocument(single))">
+              <q-item clickable  @click="copyName(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Copy name</q-item-section>
                 <q-item-section avatar>
                   <q-icon name="mdi-text-recognition" />
                 </q-item-section>
               </q-item>
-              <q-item clickable @click="copyTextColor(fixGetCorrectDocument(single))">
+              <q-item clickable @click="copyTextColor(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Copy text color</q-item-section>
                 <q-item-section avatar>
                   <q-icon name="mdi-eyedropper" />
                 </q-item-section>
               </q-item>
-              <q-item clickable @click="copyBackgroundColor(fixGetCorrectDocument(single))">
+              <q-item clickable @click="copyBackgroundColor(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Copy background color</q-item-section>
                 <q-item-section avatar>
                   <q-icon name="mdi-format-color-fill" />
                 </q-item-section>
               </q-item>
               <q-separator dark />
-              <q-item clickable @click="openExistingInput(fixGetCorrectDocument(single))">
+              <q-item clickable @click="openExistingInput(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Open document</q-item-section>
                 <q-item-section avatar>
                   <q-icon name="mdi-book-open-page-variant-outline" />
                 </q-item-section>
               </q-item>
-              <q-item clickable @click="editExistingInput(fixGetCorrectDocument(single))">
+              <q-item clickable @click="editExistingInput(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Edit document</q-item-section>
                 <q-item-section avatar>
                   <q-icon name="mdi-pencil" />
                 </q-item-section>
               </q-item>
-              <q-item clickable @click="openDocumentPreviewPanel(single._id)">
+              <q-item clickable @click="openDocumentPreviewPanel(localInput[index]._id)">
                 <q-item-section>Preview document in split-view mode</q-item-section>
                 <q-item-section avatar>
                   <q-icon name="mdi-file-search-outline" />
                 </q-item-section>
               </q-item>
-              <q-item clickable @click="addNewUnderParent(fixGetCorrectDocument(single))">
+              <q-item clickable @click="addNewUnderParent(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Create new document with this document as parent</q-item-section>
                 <q-item-section avatar>
                   <q-icon color="primary" name="mdi-file-tree" />
                 </q-item-section>
               </q-item>
-              <q-item clickable @click="copyTargetDocument(fixGetCorrectDocument(single))">
+              <q-item clickable @click="copyTargetDocument(fixGetCorrectDocument(localInput[index]))">
                 <q-item-section>Copy this document</q-item-section>
                 <q-item-section avatar>
                   <q-icon color="primary" name="mdi-content-copy" />
                 </q-item-section>
               </q-item>
               <q-separator dark />
-                <q-item clickable v-close-popup @click="triggerExport(single)">
+                <q-item clickable v-close-popup @click="triggerExport(localInput[index])">
                   <q-item-section>Export document</q-item-section>
                   <q-item-section avatar>
                     <q-icon name="mdi-database-export-outline" />
@@ -631,8 +631,8 @@ export default class Field_MultiRelationship extends FieldBase {
 
     await this.$nextTick()
     /*eslint-disable */
-    // @ts-ignore 
-    this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].hidePopup() 
+    // @ts-ignore
+    this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].hidePopup()
     /* eslint-enable */
   }
 
@@ -703,14 +703,14 @@ export default class Field_MultiRelationship extends FieldBase {
   async refocusSelect () {
     await this.$nextTick()
     /*eslint-disable */
-    // @ts-ignore 
+    // @ts-ignore
     this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].setOptionIndex(-1)
 
     if(this.agressiveRelationshipFilter){
-      // @ts-ignore     
-      this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].moveOptionSelection(1, true) 
+      // @ts-ignore
+      this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].moveOptionSelection(1, true)
     }
-    
+
     /* eslint-enable */
   }
 
@@ -855,7 +855,7 @@ export default class Field_MultiRelationship extends FieldBase {
   selectValue () {
     /*eslint-disable */
     // @ts-ignore
-    this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].updateInputValue ('')  
+    this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].updateInputValue ('')
     /* eslint-enable */
 
     this.processInput()
@@ -1007,7 +1007,7 @@ export default class Field_MultiRelationship extends FieldBase {
   addNewRelationshipObject (input: string) {
     /*eslint-disable */
     // @ts-ignore
-    this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].updateInputValue ('')  
+    this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].updateInputValue ('')
     /* eslint-enable */
 
     const newObjectType = this.inputDataBluePrint?.relationshipSettings?.connectedObjectType as unknown as string
@@ -1120,10 +1120,10 @@ export default class Field_MultiRelationship extends FieldBase {
   triggerExport (node: {_id: string}) {
     this.SSET_setDialogState(false)
     /*eslint-disable */
-    // @ts-ignore 
+    // @ts-ignore
     if(this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`]){
-      // @ts-ignore 
-      this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].hidePopup() 
+      // @ts-ignore
+      this.$refs[`multiRelationshipField${this.inputDataBluePrint.id}`].hidePopup()
     }
     /* eslint-enable */
     this.SSET_setExportDialogState([node._id])
