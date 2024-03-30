@@ -1097,10 +1097,10 @@ export default class ExportProject extends DialogBase {
   async refocusSelect () {
     await this.$nextTick()
     /*eslint-disable */
-    // @ts-ignore 
+    // @ts-ignore
     this.$refs.ref_exportDocument.setOptionIndex(-1)
-    // @ts-ignore 
-    this.$refs.ref_exportDocument.moveOptionSelection(1, true) 
+    // @ts-ignore
+    this.$refs.ref_exportDocument.moveOptionSelection(1, true)
     /* eslint-enable */
   }
 
@@ -1146,8 +1146,8 @@ export default class ExportProject extends DialogBase {
 
     await this.$nextTick()
     /*eslint-disable */
-    // @ts-ignore 
-    this.$refs.ref_exportDocument.hidePopup() 
+    // @ts-ignore
+    this.$refs.ref_exportDocument.hidePopup()
     /* eslint-enable */
   }
 
@@ -1669,6 +1669,8 @@ export default class ExportProject extends DialogBase {
   exportFile_PDF (input: I_ExportObject, exportPath: string, normalFontContents : any, boldFontContents: any) {
     const { documentDirectory, exportFileName } = this.fixExportPaths(exportPath, input)
 
+    const trimmedExportFileName = exportFileName.trim()
+
     const textFont = 11
     const subTitleFont = 15
     const listPadding = 60
@@ -1690,8 +1692,8 @@ export default class ExportProject extends DialogBase {
 
     // Write the file
     const finalExportPath = (this.useCompatibilityMode)
-      ? `${documentDirectory}/${exportFileName}-${input.id}.pdf`
-      : `${documentDirectory}/${exportFileName}.pdf`
+      ? `${documentDirectory}/${trimmedExportFileName}-${input.id}.pdf`
+      : `${documentDirectory}/${trimmedExportFileName}.pdf`
     doc.pipe(fs.createWriteStream(finalExportPath))
 
     // Name/Title
