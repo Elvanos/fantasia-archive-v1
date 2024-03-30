@@ -1,5 +1,22 @@
 <template>
   <div>
+    <!-- Insert image dialog -->
+    <WISIWYG_insertImageChoice
+      :dialog-trigger="WISIWYG_insertImageChoiceDialogTrigger"
+      @trigger-dialog-close="WISIWYG_insertImageChoiceDialogClose"
+      @passing-image-link="insertImageLink"
+    />
+
+    <!-- Change image path dialog -->
+    <WISIWYG_changeImagePath
+      :dialog-trigger="WISIWYG_changeImagePathDialogTrigger"
+      @trigger-dialog-close="WISIWYG_changeImagePathDialogClose"
+      @passing-image-path-change="changeImagePath"
+      :current-image-path="currentImagePath"
+      :current-image-target="currentImageTarget"
+    />
+
+    <!-- Insert existing document dialog -->
     <existingDocumentDialog
       v-if="editMode"
       preventOpen="true"
@@ -27,7 +44,8 @@
       v-html="localInput">
     </div>
 
-    <q-editor
+    <div>
+      <q-editor
       v-model="localInput"
       :ref="`wysiwygField${this.inputDataBluePrint.id}`"
       @paste.native="evt => pasteCapture(evt)"
@@ -40,7 +58,10 @@
       min-height="350px"
       @keypress.native="handleEditorKeypress"
       @click.native="handleEditorClick"
-      />
+      @contextmenu="handleRightClick($event)"
+      >
+      </q-editor>
+    </div>
 
     <div class="separatorWrapper">
       <q-separator color="grey q-mt-md" />
@@ -56,9 +77,14 @@ import { Component, Emit, Prop, Watch } from "vue-property-decorator"
 import FieldBase from "src/components/fields/_FieldBase"
 import { QEditor } from "quasar"
 
+import WISIWYG_insertImageChoice from "src/components/dialogs/WISIWYG_insertImageChoice.vue"
+import WISIWYG_changeImagePath from "src/components/dialogs/WISIWYG_changeImagePath.vue"
+
 @Component({
   components: {
-    existingDocumentDialog: () => import("src/components/dialogs/ExistingDocument.vue")
+    existingDocumentDialog: () => import("src/components/dialogs/ExistingDocument.vue"),
+    WISIWYG_insertImageChoice: WISIWYG_insertImageChoice,
+    WISIWYG_changeImagePath: WISIWYG_changeImagePath
   }
 })
 export default class Field_Wysiwyg extends FieldBase {
@@ -193,7 +219,7 @@ export default class Field_Wysiwyg extends FieldBase {
       if ((editor as any).isViewingSource){
         return;
       }
-      
+
       // Prevent showing up `@` character
       evt.preventDefault()
 
@@ -219,11 +245,60 @@ export default class Field_Wysiwyg extends FieldBase {
     /* eslint-enable */
   }
 
+  insertImageLink (imageLink: string) {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+    editor.focus()
+    editor.runCmd("insertParagraph")
+
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    editor.caret.restore()
+
+    editor.runCmd("insertHTML", `<img src='${imageLink}'>`)
+
+    editor.runCmd("insertParagraph")
+
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    editor.caret.restore()
+
+    editor.focus()
+  }
+
+  changeImagePath (imagePath: string, imageTarget: HTMLImageElement) {
+    imageTarget.src = imagePath
+  }
+
+  currentImagePath = ""
+  currentImageTarget = null as unknown as HTMLImageElement
+
+  handleRightClick (event: MouseEvent) {
+    if (event?.target) {
+      // @ts-ignore
+      const target = event.target as unknown as HTMLImageElement
+      const targetType:string = target.tagName
+
+      if (targetType === "IMG") {
+        this.currentImagePath = target.src
+        this.currentImageTarget = target
+
+        this.WISIWYG_changeImagePathAssignUID()
+      }
+    }
+  }
+
   /**
    * Subsitution strings for toolbar
    */
   definitions = {
-    fullscreen: { label: "Fullscreen" }
+    fullscreen: { label: "Fullscreen" },
+    insertImageLink: {
+      tip: "Insert image link",
+      icon: "image",
+      label: "",
+      handler: this.WISIWYG_insertImageChoiceAssignUID
+    }
   }
 
   /**
@@ -297,10 +372,37 @@ export default class Field_Wysiwyg extends FieldBase {
       "removeFormat"
     ],
     ["hr", "link", "quote", "unordered", "ordered", "outdent", "indent"],
+    ["insertImageLink"],
     ["undo", "redo"],
     ["fullscreen"],
     ["viewsource"]
   ]
+
+  /****************************************************************/
+  // Insert image dialog
+  /****************************************************************/
+
+  WISIWYG_insertImageChoiceDialogTrigger: string | false = false
+  WISIWYG_insertImageChoiceDialogClose () {
+    this.WISIWYG_insertImageChoiceDialogTrigger = false
+  }
+
+  WISIWYG_insertImageChoiceAssignUID () {
+    this.WISIWYG_insertImageChoiceDialogTrigger = this.generateUID()
+  }
+
+  /****************************************************************/
+  // Change image path dialog
+  /****************************************************************/
+
+  WISIWYG_changeImagePathDialogTrigger: string | false = false
+  WISIWYG_changeImagePathDialogClose () {
+    this.changeImagePathDialogTrigger = false
+  }
+
+  WISIWYG_changeImagePathAssignUID () {
+    this.WISIWYG_changeImagePathDialogTrigger = this.generateUID()
+  }
 }
 </script>
 

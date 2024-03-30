@@ -114,6 +114,22 @@ a {
   color: var(--q-color-primary);
 }
 
+img {
+  max-width: 100%;
+}
+
+.doc-token{
+  display: inline-block;
+  padding: 4px 6px;
+  font-size: 13px;
+  line-height: 13px;
+  border-radius: 4px;
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--q-color-primary);
+  background-color: map-get($customColors, 'gunmetal-medium');
+  vertical-align: baseline;
+}
+
 .q-editor {
   background-color: rgba(250, 250, 250, 1);
   padding-bottom: 15px;
