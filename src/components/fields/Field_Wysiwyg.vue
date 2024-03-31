@@ -267,7 +267,12 @@ export default class Field_Wysiwyg extends FieldBase {
   }
 
   changeImagePath (imagePath: string, imageTarget: HTMLImageElement) {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
     imageTarget.src = imagePath
+
+    // Bugfix due to editor not refreshing image SRC content after direct edit like this. Therefore we need to trigger the refresh manually by inserting imaginary html code.
+    editor.runCmd("insertHTML", "")
   }
 
   currentImagePath = ""
@@ -397,7 +402,7 @@ export default class Field_Wysiwyg extends FieldBase {
 
   WISIWYG_changeImagePathDialogTrigger: string | false = false
   WISIWYG_changeImagePathDialogClose () {
-    this.changeImagePathDialogTrigger = false
+    this.WISIWYG_changeImagePathDialogTrigger = false
   }
 
   WISIWYG_changeImagePathAssignUID () {

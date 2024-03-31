@@ -38,6 +38,9 @@
                         Please note that the PDF export doesn't play nice with:
                         <ul>
                           <li>
+                            Images - It will export them, but each has to places on a new page due to limitations of the PDF-creator software.
+                          </li>
+                          <li>
                             Underlined text if different parts of the same paragraph have increased/decreased font sizes.
                           </li>
                           <li>
@@ -662,6 +665,8 @@ import { uid, extend } from "quasar"
 import fs from "fs-extra"
 import path from "path"
 import documentPreview from "src/components/DocumentPreview.vue"
+import request from "request"
+import util from "util"
 
 import { I_ExportObject } from "src/interfaces/I_ExportObject"
 import { I_ShortenedDocument } from "src/interfaces/I_OpenedDocument"
@@ -1666,7 +1671,7 @@ export default class ExportProject extends DialogBase {
     fs.writeFileSync(finalExportPath, mdContent)
   }
 
-  exportFile_PDF (input: I_ExportObject, exportPath: string, normalFontContents : any, boldFontContents: any) {
+  async exportFile_PDF (input: I_ExportObject, exportPath: string, normalFontContents : any, boldFontContents: any) {
     const { documentDirectory, exportFileName } = this.fixExportPaths(exportPath, input)
 
     const trimmedExportFileName = exportFileName.trim()
@@ -1751,7 +1756,7 @@ export default class ExportProject extends DialogBase {
     }
 
     // Other fields
-    input.fieldValues.forEach(field => {
+    for (const field of input.fieldValues) {
       if (field.type === "break" && !this.writerMode) {
         doc.moveDown()
           .font("Roboto-Bold").fillColor("#000000").fontSize(subTitleFont)
@@ -1770,7 +1775,7 @@ export default class ExportProject extends DialogBase {
 
         doc.font("Roboto-Regular").fillColor("#000000").fontSize(textFont)
 
-        returnList.forEach(node => {
+        for (const node of returnList) {
           if (node.type === "text") {
             const wysiwygOptions: {[key:string]: any} = extend(true, {}, paragraphOptions)
             wysiwygOptions.baseline = "alphabetic"
@@ -1812,10 +1817,60 @@ export default class ExportProject extends DialogBase {
             // @ts-ignore
             doc.text(node.content, wysiwygPadding, undefined, wysiwygOptions)
           }
+
+          if (node.type === "image") {
+            const rawPath = node.attrs.src as unknown as string
+            let fixedPath = ""
+            let base64Image = ""
+
+            // CASE - Local image paths
+            if (rawPath.includes("file:///")) {
+              fixedPath = rawPath.replace("file:///", "")
+
+              if (fs.existsSync(fixedPath)) {
+                base64Image = fs.readFileSync(fixedPath, { encoding: "base64" })
+                doc.addPage()
+                doc.image(`data:image;base64,${base64Image}`, { width: 450 })
+                doc.moveDown()
+              }
+              else {
+                doc.addPage()
+                // @ts-ignore
+                doc.text(`Local image not found at the following path: ${fixedPath}`, blockquotePadding, undefined)
+                doc.moveDown()
+                doc.moveDown()
+              }
+            }
+
+            // CASE - Online image paths
+            if (rawPath.includes("https://") || rawPath.includes("http://")) {
+              fixedPath = rawPath
+
+              const imageRequest = request.defaults({ encoding: null })
+              const imageRequestPromise = util.promisify(imageRequest)
+              const response = await imageRequestPromise(fixedPath)
+
+              if (response.statusCode === 200) {
+                base64Image = Buffer.from(response.body).toString("base64")
+                doc.addPage()
+                doc.image(`data:image;base64,${base64Image}`, { width: 450 })
+                doc.moveDown()
+              }
+              else {
+                doc.addPage()
+                // @ts-ignore
+                doc.text(`Online image not found on the following URL: ${fixedPath}`, blockquotePadding, undefined)
+                doc.moveDown()
+                doc.moveDown()
+              }
+            }
+          }
+
           if (node.type === "br") {
             doc.moveDown()
           }
-        })
+        }
+
         // @ts-ignore
         doc.moveDown()
       }
@@ -1827,7 +1882,7 @@ export default class ExportProject extends DialogBase {
           .list((Array.isArray(field.value) ? field.value : [field.value]), listPadding, undefined, paragraphOptions)
           .moveDown()
       }
-    })
+    }
 
     doc.end()
   }
@@ -1842,7 +1897,8 @@ export default class ExportProject extends DialogBase {
       "h5",
       "h6",
       "li",
-      "blockquote"
+      "blockquote",
+      "img"
     ]
 
     const headingsList = [
@@ -1942,6 +1998,8 @@ export default class ExportProject extends DialogBase {
       if (node.parentNode?.attrs?.blockquotePadding) {
         parentIsBlockquote = true
       }
+
+      node.src = (node?.attrs?.src ? node.attrs.src : false)
 
       node.attrs = {}
       node.attrs.continued = false
@@ -2086,6 +2144,18 @@ export default class ExportProject extends DialogBase {
           content: "     • ",
           attrs: {
             continued: true
+          }
+        }
+        // @ts-ignore
+        returnNodeList.push(returnNode)
+      }
+
+      // Image hangling
+      if ((node.type === "tag" && node.name === "img")) {
+        const returnNode = {
+          type: "image",
+          attrs: {
+            src: node.src
           }
         }
         // @ts-ignore

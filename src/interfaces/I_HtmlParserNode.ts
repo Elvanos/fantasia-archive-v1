@@ -11,4 +11,5 @@ export interface I_HtmlParserNode {
   selfNodeList?: I_HtmlParserNode[];
   parentNode?: I_HtmlParserNode
   isLast?: boolean
+  src?: string|boolean|number|undefined
 }
