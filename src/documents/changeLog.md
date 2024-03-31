@@ -2,6 +2,25 @@
 
 ---
 
+## 0.1.13
+
+### Known issues
+
+- Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
+- Loading existing project can very occasionally get stuck. Restarting the app fixes this.
+- Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway).
+
+### New features
+
+- Added Custom CSS support
+- Added WYSIWYG image linking/editing support
+- Added PDF export online/offline image support
+
+### Bugfixes & Optimizations
+- Fixed improper note pairing in view mode for multi-relationship fields
+- Fixed "Nested project creation" but when saving the current project inside its own folder which previously resulted in a creation of subfolder of the same name and impossibility to load without manual tweaking
+- Fixed trimming of document names during export
+
 ## 0.1.12
 
 ### Known issues
