@@ -1245,7 +1245,7 @@ export default class ExportProject extends DialogBase {
 
         // PDF
         if (this.selectedExportFormat === "Adobe Reader - PDF") {
-          this.exportFile_PDF(exportObject, exportPath, normalFontContents, boldFontContents)
+          await this.exportFile_PDF(exportObject, exportPath, normalFontContents, boldFontContents)
         }
 
         await this.sleep(10)
@@ -1848,9 +1848,12 @@ export default class ExportProject extends DialogBase {
 
               const imageRequest = request.defaults({ encoding: null })
               const imageRequestPromise = util.promisify(imageRequest)
-              const response = await imageRequestPromise(fixedPath)
+              // @ts-ignore
+              const response = await imageRequestPromise(fixedPath, undefined)
 
+              // @ts-ignore
               if (response.statusCode === 200) {
+                // @ts-ignore
                 base64Image = Buffer.from(response.body).toString("base64")
                 doc.addPage()
                 doc.image(`data:image;base64,${base64Image}`, { width: 450 })
