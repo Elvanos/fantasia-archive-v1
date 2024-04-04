@@ -18,7 +18,6 @@
     "apexcharts": "^3.26.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
-    "dedent": "^1.5.1",
     "electron-find": "^1.0.7",
     "html-parse-stringify": "^3.0.1",
     "json2md": "^1.10.0",

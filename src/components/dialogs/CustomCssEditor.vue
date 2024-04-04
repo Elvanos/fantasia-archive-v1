@@ -39,7 +39,6 @@ import { Component, Watch } from "vue-property-decorator"
 import DialogBase from "src/components/dialogs/_DialogBase"
 import { changeCurrentProjectSettings } from "src/scripts/projectManagement/projectManagent"
 
-import dedent from "dedent"
 // @ts-ignore
 import { codemirror } from "vue-codemirror"
 
@@ -95,7 +94,7 @@ export default class CustomCssEditorDialog extends DialogBase {
     }
     this.SSET_setDialogState(true)
     this.dialogModel = true
-    this.customCSS = dedent(this.SGET_getProjectCustomCSS)
+    this.customCSS = this.SGET_getProjectCustomCSS
   }
 
   async saveCustomCss () {
