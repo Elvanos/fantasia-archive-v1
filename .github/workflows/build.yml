@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Build App - Mac14 update
+name: Build App - Mac12 update
 
 # Manually triggered
 on:
@@ -17,7 +17,7 @@ jobs:
     environment: production
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-14]
+        os: [ubuntu-latest, windows-latest, macOS-12]
 
     steps:
       - name: Check out the code
@@ -44,7 +44,7 @@ jobs:
             dist/electron/Packaged/*.AppImage
 
       - name: Upload MacOS Artifact
-        if: ${{ matrix.os == 'macOS-14' }}
+        if: ${{ matrix.os == 'macOS-12' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           # Artifact name
