@@ -17,7 +17,7 @@ jobs:
     environment: production
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-11]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - name: Check out the code
@@ -42,14 +42,6 @@ jobs:
           path: |
             dist/electron/Packaged/*.snap
             dist/electron/Packaged/*.AppImage
-
-      - name: Upload MacOS Artifact
-        if: ${{ matrix.os == 'macOS-11' }}
-        uses: actions/upload-artifact@v2.2.3
-        with:
-          # Artifact name
-          name: Mac_FA ${{ github.event.inputs.version }}
-          path: dist/electron/Packaged/*.dmg
 
       - name: Upload Windows Artifact
         if: ${{ matrix.os == 'windows-latest' }}
