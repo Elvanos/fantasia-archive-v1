@@ -4,14 +4,17 @@
 
 ## 0.1.14
 
+# Major, very sad annoucement
+- GitHub Actions (the compiler for multiple operating systems that I use) stopped supporting our MacOS version (MacOS11) and therefore I won't be able to automatically created Mac-builds for FA1 (new version will not have this issue). Perhaps this issues can be remedied if one compiles FA on their own Mac or if someone from the community with a Mac reaches out and managed to compile the newest FA version for you people, but as it stands now, I am sadly forced to remove direct support for any new pre-compiled Mac builds from now on.
+
 ### Known issues
 - Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
 - Loading existing project can very occasionally get stuck. Restarting the app fixes this.
 - Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway).
 
 ### New features
-- Remaped `CTRL + F` keybind to full-page search instead of Editor full screen mode toggle
-- Remaped `CTRL + SHIFT + F` keybind to Editor full screen mode toggle instead of full-page search
+- Remapped `CTRL + F` keybind to full-page search instead of Editor full screen mode toggle
+- Remapped `CTRL + SHIFT + F` keybind to Editor full screen mode toggle instead of full-page search
 - Added `F11` keybind as alternative way to toggle Editor full screen mode
 - Added option to rebind the Editor full-screen mode keybind
 - Added auto-scroll on tab-swapping inside full-screen editors
