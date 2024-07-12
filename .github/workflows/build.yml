@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Build App
+name: Build App - Mac14 update
 
 # Manually triggered
 on:
