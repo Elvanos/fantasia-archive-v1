@@ -33,14 +33,22 @@ jobs:
           npm install
           npm run build
 
-      - name: Upload Linux Artifact
+      - name: Upload Linux Artifact - Snap
         if: ${{ matrix.os == 'ubuntu-latest' }}
         uses: actions/upload-artifact@v2.2.3
         with:
           # Artifact name
-          name: Linux_FA ${{ github.event.inputs.version }}
+          name: Linux_FA Snap ${{ github.event.inputs.version }}
           path: |
             dist/electron/Packaged/*.snap
+
+      - name: Upload Linux Artifact - AppImage
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          # Artifact name
+          name: Linux_FA AppImage ${{ github.event.inputs.version }}
+          path: |
             dist/electron/Packaged/*.AppImage
 
       - name: Upload Windows Artifact
