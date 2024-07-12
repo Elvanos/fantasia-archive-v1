@@ -329,9 +329,12 @@
           :inputDataBluePrint="field"
           :inputDataValue="(retrieveFieldValue(currentData, field.id)) ? retrieveFieldValue(currentData, field.id) : ''"
           :isNew="currentData.isNew"
+          :fullScreenStatus="currentData.hasFullScreenEditMode"
+          :fullScreenScrollDistance="currentData.fullScreenScrollDistance"
           :editMode="editMode"
           :current-id="currentData._id"
           @signal-input="reactToFieldUpdate($event, field)"
+          @signal-full-screen-status-change="reactToFullScreenStatusChange($event)"
           />
 
           <Field_Tags
@@ -370,7 +373,7 @@ import BaseClass from "src/BaseClass"
 
 import { I_Blueprint, I_ExtraFields } from "src/interfaces/I_Blueprint"
 import { extend } from "quasar"
-import { I_OpenedDocument, I_ShortenedDocument } from "src/interfaces/I_OpenedDocument"
+import { I_OpenedDocument, I_ShortenedDocument, I_HasFullScreenEditMode } from "src/interfaces/I_OpenedDocument"
 import { copyDocument } from "src/scripts/documentActions/copyDocument"
 
 import { saveDocument } from "src/scripts/databaseManager/documentManager"
@@ -497,26 +500,29 @@ export default class PageDocumentDisplay extends BaseClass {
    */
   @Watch("$route", { immediate: true, deep: true })
   async onUrlChange () {
-    // window.removeEventListener("scroll", this.watchPageScroll)
-    // window.removeEventListener("scroll", this.watchPageScroll)
-    // window.removeEventListener("scroll", this.watchPageScroll)
+    // Multiple removes to avoid bug concerning hanging window listeners bugging out the memory
+    window.removeEventListener("scroll", this.watchPageScroll)
+    window.removeEventListener("scroll", this.watchPageScroll)
+    window.removeEventListener("scroll", this.watchPageScroll)
 
     this.documentTemplateList = await retrieveAllDocumentTemplatesFromDB()
-    await this.sleep(50)
     const doc = this.findRequestedOrActiveDocument() as I_OpenedDocument
     window.scrollTo({ top: 0, behavior: "auto" })
 
     this.reloadLocalContent()
 
-    const scrollTop = (doc.scrollDistance && !this.preventAutoScroll) ? doc.scrollDistance : 0
+    setTimeout(() => {
+      const scrollTop = (doc.scrollDistance && !this.preventAutoScroll) ? doc.scrollDistance : 0
 
-    window.scrollTo({ top: scrollTop, behavior: "auto" })
+      window.scrollTo({ top: scrollTop, behavior: "auto" })
 
-    // window.removeEventListener("scroll", this.watchPageScroll)
-    // window.removeEventListener("scroll", this.watchPageScroll)
-    // window.removeEventListener("scroll", this.watchPageScroll)
+      // Multiple removes to avoid bug concerning hanging window listeners bugging out the memory
+      window.removeEventListener("scroll", this.watchPageScroll)
+      window.removeEventListener("scroll", this.watchPageScroll)
+      window.removeEventListener("scroll", this.watchPageScroll)
 
-    // window.addEventListener("scroll", this.watchPageScroll)
+      window.addEventListener("scroll", this.watchPageScroll)
+    }, 200)
   }
 
   documentTemplateList: I_DocumentTemplate[] = []
@@ -541,7 +547,7 @@ export default class PageDocumentDisplay extends BaseClass {
       // Attempts to add current document to list
       const dataPass = { doc: dataCopy, treeAction: false }
       this.SSET_updateOpenedDocument(dataPass)
-    }, 200)
+    }, 100)
   }
 
   /**
@@ -794,6 +800,14 @@ export default class PageDocumentDisplay extends BaseClass {
       const dataPass = { doc: this.localDataCopy, treeAction: true }
       this.SSET_updateOpenedDocument(dataPass)
     }
+  }
+
+  reactToFullScreenStatusChange (inputScreenStatus: I_HasFullScreenEditMode) {
+    this.currentData.hasFullScreenEditMode = inputScreenStatus
+
+    this.localDataCopy = extend(true, {}, this.currentData)
+    const dataPass = { doc: this.localDataCopy, treeAction: false }
+    this.SSET_updateOpenedDocument(dataPass)
   }
 
   /**

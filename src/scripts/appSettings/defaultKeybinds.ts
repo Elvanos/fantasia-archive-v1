@@ -11,15 +11,37 @@ export const defaultKeybinds = [
     tooltip: "Open keybind cheatsheet"
   },
 
-  // Open full-page search - CTRL + SHIFT + F
+  // Open full-page search - CTRL + F
+  {
+    altKey: false,
+    ctrlKey: true,
+    shiftKey: false,
+    which: 70,
+    editable: true,
+    id: "openFullPageSearch",
+    tooltip: "Open full-page search"
+  },
+
+  // Toggle current WYSIWYG fullscreen mode - CTRL + SHIFT + F
   {
     altKey: false,
     ctrlKey: true,
     shiftKey: true,
     which: 70,
     editable: true,
-    id: "openFullPageSearch",
-    tooltip: "Open full-page search"
+    id: "toggleCurrentWysiwygFullScreen",
+    tooltip: "Toggle current WYSIWYG fullscreen mode "
+  },
+
+  // Toggle current WYSIWYG fullscreen mode - F11
+  {
+    altKey: false,
+    ctrlKey: false,
+    shiftKey: false,
+    which: 122,
+    editable: false,
+    id: "toggleCurrentWysiwygFullScreenAlt",
+    tooltip: "Toggle current WYSIWYG fullscreen mode - Alternate"
   },
 
   // Show project overview - NONE

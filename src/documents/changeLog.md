@@ -2,6 +2,25 @@
 
 ---
 
+## 0.1.14
+
+### Known issues
+- Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
+- Loading existing project can very occasionally get stuck. Restarting the app fixes this.
+- Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway).
+
+### New features
+- Remaped `CTRL + F` keybind to full-page search instead of Editor full screen mode toggle
+- Remaped `CTRL + SHIFT + F` keybind to Editor full screen mode toggle instead of full-page search
+- Added `F11` keybind as alternative way to toggle Editor full screen mode
+- Added option to rebind the Editor full-screen mode keybind
+- Added auto-scroll on tab-swapping inside full-screen editors
+
+### Bugfixes & Optimizations
+- Added text editor Full Screen mode persisting through tab-swapping
+- Fixed auto-scroll on tab-swapping
+- Fixed `@` insert in text editors removing white lines before it and attaching itself to the previous text
+
 ## 0.1.13
 
 ### Known issues

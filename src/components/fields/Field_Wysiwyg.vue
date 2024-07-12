@@ -47,7 +47,8 @@
     <div>
       <q-editor
       v-model="localInput"
-      :ref="`wysiwygField${this.inputDataBluePrint.id}`"
+      :id="inputDataBluePrint.id"
+      :ref="`wysiwygField${inputDataBluePrint.id}`"
       @paste.native="evt => pasteCapture(evt)"
       :toolbar="wysiwygOptions"
       :fonts="wysiwygFonts"
@@ -75,7 +76,8 @@
 import { Component, Emit, Prop, Watch } from "vue-property-decorator"
 
 import FieldBase from "src/components/fields/_FieldBase"
-import { QEditor } from "quasar"
+import { QEditor, extend } from "quasar"
+import { I_HasFullScreenEditMode, I_OpenedDocument } from "src/interfaces/I_OpenedDocument"
 
 import WISIWYG_insertImageChoice from "src/components/dialogs/WISIWYG_insertImageChoice.vue"
 import WISIWYG_changeImagePath from "src/components/dialogs/WISIWYG_changeImagePath.vue"
@@ -97,6 +99,22 @@ export default class Field_Wysiwyg extends FieldBase {
    */
   @Prop({ default: "" }) readonly inputDataValue!: string
 
+  /**
+   * Current status of the fullscreen of the field
+   */
+  @Prop({
+    default: () => ({
+      fieldID: "",
+      value: false
+    })
+
+  }) readonly fullScreenStatus!: I_HasFullScreenEditMode
+
+  /**
+   * Current scroll in fullscreen mode
+   */
+  @Prop({ default: 0 }) readonly fullScreenScrollDistance!: number
+
   /****************************************************************/
   // INPUT HANDLING
   /****************************************************************/
@@ -107,6 +125,35 @@ export default class Field_Wysiwyg extends FieldBase {
   @Watch("inputDataValue", { deep: true, immediate: true })
   reactToInputChanges () {
     this.localInput = this.inputDataValue
+  }
+
+  /**
+   * Watch changes to the prefilled data already existing in the field and update local input accordingly
+   */
+  @Watch("fullScreenStatus", { deep: true, immediate: true })
+  reactToFullScreenStatusChanges () {
+    this.$nextTick(() => {
+      const fullScreenFieldID = this.fullScreenStatus.fieldID
+      const localID = this.inputDataBluePrint.id
+
+      const fullScreenValue = this.fullScreenStatus.value
+      if (fullScreenFieldID === localID) {
+        const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+        if (fullScreenValue) {
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          editor.setFullscreen()
+          editor.focus()
+        }
+        else {
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+          editor.exitFullscreen()
+          editor.focus()
+        }
+      }
+    })
   }
 
   /**
@@ -132,6 +179,23 @@ export default class Field_Wysiwyg extends FieldBase {
   @Emit()
   signalInput () {
     return this.localInput.trim()
+  }
+
+  /**
+   * Signals the fullscreen value change to the document body parent component
+   */
+  @Emit()
+  signalFullScreenStatusChange () {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const fullScreenState = editor.inFullscreen
+
+    return {
+      fieldID: this.inputDataBluePrint.id,
+      value: !fullScreenState
+    }
   }
 
   /****************************************************************/
@@ -191,10 +255,8 @@ export default class Field_Wysiwyg extends FieldBase {
     /*eslint-disable */
     const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as any
 
-    editor.focus()
     const doc = this.SGET_document(id)
-    // We need to timeout here to give time to the runtime to focus the editor.
-    // when focused the caret will return to it's previous position and we can insert the document link
+
     setTimeout(() => {
       editor.runCmd("insertHtml", `<a href="document:${id}">${doc.label}</a>&nbsp;`)
     }, 100)
@@ -278,6 +340,44 @@ export default class Field_Wysiwyg extends FieldBase {
   currentImagePath = ""
   currentImageTarget = null as unknown as HTMLImageElement
 
+  toggleEditorFullScreen () {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const fullScreenState = editor.inFullscreen
+
+    if (fullScreenState) {
+      this.signalFullScreenStatusChange()
+
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      editor.exitFullscreen()
+    }
+    else {
+      this.signalFullScreenStatusChange()
+
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      editor.setFullscreen()
+    }
+  }
+
+  turnOffEditorFullScreen () {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const fullScreenState = editor.inFullscreen
+
+    if (fullScreenState) {
+      this.signalFullScreenStatusChange()
+
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      editor.exitFullscreen()
+    }
+  }
+
   handleRightClick (event: MouseEvent) {
     if (event?.target) {
       // @ts-ignore
@@ -297,7 +397,12 @@ export default class Field_Wysiwyg extends FieldBase {
    * Subsitution strings for toolbar
    */
   definitions = {
-    fullscreen: { label: "Fullscreen" },
+    toggleFullSceen: {
+      tip: "Toggle fullscreen <br><br> (Ctrl + Shift + F / F11)",
+      icon: "fullscreen",
+      label: "Fullscreen",
+      handler: this.toggleEditorFullScreen
+    },
     insertImageLink: {
       tip: "Insert image link",
       icon: "image",
@@ -379,7 +484,7 @@ export default class Field_Wysiwyg extends FieldBase {
     ["hr", "link", "quote", "unordered", "ordered", "outdent", "indent"],
     ["insertImageLink"],
     ["undo", "redo"],
-    ["fullscreen"],
+    ["toggleFullSceen"],
     ["viewsource"]
   ]
 
@@ -407,6 +512,125 @@ export default class Field_Wysiwyg extends FieldBase {
 
   WISIWYG_changeImagePathAssignUID () {
     this.WISIWYG_changeImagePathDialogTrigger = this.generateUID()
+  }
+
+  /****************************************************************/
+  // Keybinds management
+  /****************************************************************/
+
+  /**
+   * Local keybinds
+   */
+  @Watch("SGET_getCurrentKeyBindData", { deep: true })
+  processKeyPush () {
+    // Quick new document
+    if ((this.determineKeyBind("toggleCurrentWysiwygFullScreen") || this.determineKeyBind("toggleCurrentWysiwygFullScreenAlt")) && !this.SGET_getDialogsState) {
+      const localFocus = document.activeElement?.closest(`#${this.inputDataBluePrint.id}`)
+
+      if (localFocus) {
+        this.toggleEditorFullScreen()
+      }
+      else {
+        this.turnOffEditorFullScreen()
+      }
+    }
+  }
+
+  /****************************************************************/
+  // FullScreen Scrolling support
+  /****************************************************************/
+  /**
+  * Determines if the documents will recall their scroll distances and auto-scroll on switching ot not.
+  */
+  preventAutoScroll = false
+
+  decounceScrollTimer = false as any
+
+  mounted () {
+    this.addEditorScrollWatcher()
+    this.fullScreenAutoScroll()
+  }
+
+  updated () {
+    this.addEditorScrollWatcher()
+  }
+
+  fullScreenAutoScroll () {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+    if (!editor) {
+      return
+    }
+
+    const editorContent = editor.$el.querySelector(".q-editor__content")
+
+    if (!editorContent) {
+      return
+    }
+
+    const scrollTop = (this.fullScreenScrollDistance && !this.preventAutoScroll) ? this.fullScreenScrollDistance : 0
+
+    setTimeout(() => {
+      editorContent.scrollTo({ top: scrollTop, behavior: "auto" })
+    }, 120)
+  }
+
+  addEditorScrollWatcher () {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+    if (!editor) {
+      return
+    }
+
+    const editorContent = editor.$el.querySelector(".q-editor__content")
+
+    if (!editorContent) {
+      return
+    }
+
+    setTimeout(() => {
+      editorContent.addEventListener("scroll", (e: Event) => {
+        this.watchEditorScroll(e)
+      })
+    }, 100)
+  }
+
+  beforeUpdate () {
+    const editor = this.$refs[`wysiwygField${this.inputDataBluePrint.id}`] as QEditor
+
+    if (!editor) {
+      return
+    }
+
+    const editorContent = editor.$el.querySelector(".q-editor__content")
+
+    if (!editorContent) {
+      return
+    }
+    editorContent.removeEventListener("scroll", (e: Event) => {
+      this.watchEditorScroll(e)
+    })
+  }
+
+  watchEditorScroll (event: Event) {
+    if (this.preventAutoScroll || !this.editMode || !this.fullScreenStatus.value) {
+      return
+    }
+
+    if (this.decounceScrollTimer) {
+      window.clearTimeout(this.decounceScrollTimer)
+    }
+
+    this.decounceScrollTimer = window.setTimeout(() => {
+      const dataCopy: I_OpenedDocument = extend(true, {}, this.findRequestedOrActiveDocument())
+
+      // @ts-ignore
+      dataCopy.fullScreenScrollDistance = event.target.scrollTop
+
+      // Attempts to add current document to list
+      const dataPass = { doc: dataCopy, treeAction: false }
+      this.SSET_updateOpenedDocument(dataPass)
+    }, 100)
   }
 }
 </script>

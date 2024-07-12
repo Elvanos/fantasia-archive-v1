@@ -237,7 +237,12 @@ export default class App extends BaseClass {
     // console.log(`Alt: ${e.altKey}`)
     // console.log(e)
 
-    if (e?.altKey === true || e?.ctrlKey || e?.shiftKey) {
+    const specialKeyList = [
+      // F11
+      122
+    ]
+
+    if (e?.altKey === true || e?.ctrlKey || e?.shiftKey || specialKeyList.includes(e?.which)) {
       const ouputKeycombo = {
         altKey: e.altKey,
         ctrlKey: e.ctrlKey,

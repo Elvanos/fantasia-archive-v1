@@ -29,7 +29,7 @@ export default class BaseClass extends Vue {
   /**
    * Generates unique ID string
    */
-  generateUID () : string {
+  generateUID(): string {
     return uid()
   }
 
@@ -37,7 +37,7 @@ export default class BaseClass extends Vue {
    * Retrieves icon color for relationship searches
    * If the current document has "activeTypeSearch" property, then return "primary" color instead
    */
-  retrieveIconColor (document: I_ShortenedDocument): string {
+  retrieveIconColor(document: I_ShortenedDocument): string {
     // @ts-ignore
     return (document.activeTypeSearch) ? colors.getBrand("primary") : document.color
   }
@@ -45,14 +45,14 @@ export default class BaseClass extends Vue {
   /**
    * Async wait for XY miliseconds
    */
-  sleep (ms:number) {
+  sleep(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   /**
    * Strip all tags from a string
    */
-  stripTags (input: string) {
+  stripTags(input: string) {
     return (input) ? input.replace(/<[^>]+>/g, "") : input
   }
 
@@ -82,12 +82,12 @@ export default class BaseClass extends Vue {
   @FloatingWindows.Mutation("setNoteCorkboardWindowVisible") SSET_setNoteCorkboardWindowVisible!: () => void
 
   @FloatingWindows.Getter("getDocumentPreviewVisible") SGET_getDocumentPreviewVisible!: string
-  @FloatingWindows.Mutation("setDocumentPreviewWindowVisible") SSET_setDocumentPreviewWindowVisible!: (input:boolean) => void
+  @FloatingWindows.Mutation("setDocumentPreviewWindowVisible") SSET_setDocumentPreviewWindowVisible!: (input: boolean) => void
 
   @FloatingWindows.Getter("getDocumentPreviewWindowID") SGET_getDocumentPreviewWindowID!: string
   @FloatingWindows.Mutation("setDocumentPreviewWindowID") SSET_setDocumentPreviewWindowID!: (input: string) => void
 
-  openDocumentPreviewPanel (id: string) {
+  openDocumentPreviewPanel(id: string) {
     this.SSET_setDocumentPreviewWindowID(id)
     this.SSET_setDocumentPreviewWindowVisible(true)
   }
@@ -108,7 +108,7 @@ export default class BaseClass extends Vue {
    * Builds a humanly redable represetation of the keybind in string form
    * @param keybindId - Keybind object to build the string out of
    */
-  retrieveKeybindString (keybind: I_KeyPressObject): string {
+  retrieveKeybindString(keybind: I_KeyPressObject): string {
     let keybindString = ""
 
     if (!keybind) {
@@ -236,7 +236,7 @@ export default class BaseClass extends Vue {
    * Determines if the keybind triggered the proper condition
    * @param keybindId - ID of the keybind to determine what to match
    */
-  determineKeyBind (keybindId: string): boolean {
+  determineKeyBind(keybindId: string): boolean {
     const currentKeybindData = this.SGET_getCurrentKeyBindData
 
     const currentKeyPress = currentKeybindData.currentKeyPress
@@ -277,15 +277,15 @@ export default class BaseClass extends Vue {
    * Generates a brand new route for the new object with individual ID
    * @param newObject A new object to be creared
    */
-  addNewObjectRoute (newObject: I_NewObjectTrigger) {
+  addNewObjectRoute(newObject: I_NewObjectTrigger) {
     const parentID = (newObject?.parent) || ""
     const tag = (newObject?.tag) || ""
 
     this.$router.push({
       path: `/project/display-content/${newObject._id}/${uid()}`,
       query: { parent: parentID, tag: tag }
-    }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+    }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -297,7 +297,7 @@ export default class BaseClass extends Vue {
    * Open a new route for an already existing object
    * @param existingObject An already existing object passed in
    */
-  openExistingDocumentRouteWithEdit (existingObject:I_OpenedDocument | I_FieldRelationship) {
+  openExistingDocumentRouteWithEdit(existingObject: I_OpenedDocument | I_FieldRelationship) {
     const currentDoc = this.findRequestedOrActiveDocument()
 
     if (currentDoc && existingObject._id === currentDoc._id && !currentDoc.editMode) {
@@ -311,8 +311,8 @@ export default class BaseClass extends Vue {
     this.$router.push({
       path: existingObject.url,
       query: { editMode: "editMode" }
-    }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+    }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -324,9 +324,9 @@ export default class BaseClass extends Vue {
    * Open a new route for an already existing object
    * @param existingObject An already existing object passed in
    */
-  openExistingDocumentRoute (existingObject:I_OpenedDocument | I_FieldRelationship | I_ShortenedDocument) {
-    this.$router.push({ path: existingObject.url }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+  openExistingDocumentRoute(existingObject: I_OpenedDocument | I_FieldRelationship | I_ShortenedDocument) {
+    this.$router.push({ path: existingObject.url }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -342,7 +342,7 @@ export default class BaseClass extends Vue {
 
   @Options.Action("setOptions") SSET_options!: (input: OptionsStateInteface) => void
 
-  toggleHierarchicalTree (): void {
+  toggleHierarchicalTree(): void {
     const optionsSnapshot: OptionsStateInteface = extend(true, {}, this.SGET_options)
 
     optionsSnapshot.hideHierarchyTree = !optionsSnapshot.hideHierarchyTree
@@ -442,7 +442,7 @@ export default class BaseClass extends Vue {
    * If provided with an document, finds it among the opened list
    * Otherwise retireves the currently opened document based on the currently active route
    */
-  findRequestedOrActiveDocument (doc?: I_OpenedDocument) {
+  findRequestedOrActiveDocument(doc?: I_OpenedDocument) {
     if (doc) {
       return (this.SGET_allOpenedDocuments.docs.find(e => e.url === doc.url)) || false
     }
@@ -456,7 +456,7 @@ export default class BaseClass extends Vue {
    * @param document - Document object that is expected to contain the field
    * @param fieldID - ID of the field to check
    */
-  retrieveFieldValue (document: I_OpenedDocument| I_ShortenedDocument, fieldID: string) : string | number | [] | false | I_FieldRelationship {
+  retrieveFieldValue(document: I_OpenedDocument | I_ShortenedDocument, fieldID: string): string | number | [] | false | I_FieldRelationship {
     const fieldData = document?.extraFields
 
     // Fizzle if field doesnt exist
@@ -472,7 +472,7 @@ export default class BaseClass extends Vue {
    * @param document - Document object that is expected to contain the field
    * @param fieldID - ID of the field to check
    */
-  retrieveFieldType (document: I_OpenedDocument| I_ShortenedDocument, fieldID: string) : string | number | [] | false | I_FieldRelationship {
+  retrieveFieldType(document: I_OpenedDocument | I_ShortenedDocument, fieldID: string): string | number | [] | false | I_FieldRelationship {
     const fieldData = document?.extraFields
 
     // Fizzle if field doesnt exist
@@ -491,7 +491,7 @@ export default class BaseClass extends Vue {
    * @param document - Document object that is expected to contain the field
    * @param fieldID - ID of the field to check
    */
-  determineLegacyField (document: I_OpenedDocument| I_ShortenedDocument, fieldID: string) : string | number | [] | false | I_FieldRelationship {
+  determineLegacyField(document: I_OpenedDocument | I_ShortenedDocument, fieldID: string): string | number | [] | false | I_FieldRelationship {
     const fieldData = document?.extraFields
 
     // Fizzle if field doesnt exist
@@ -510,7 +510,7 @@ export default class BaseClass extends Vue {
    * @param document - Document object that is expected to contain the field
    * @param fieldID - ID of the field to check
    */
-  retrieveFieldLength (document: I_OpenedDocument, fieldID: string) : number | false {
+  retrieveFieldLength(document: I_OpenedDocument, fieldID: string): number | false {
     const fieldData = document?.extraFields
 
     // Fizzle if field doesnt exist
@@ -527,13 +527,13 @@ export default class BaseClass extends Vue {
   }
 
   @Dialogs.Getter("getDialogsState") SGET_getDialogsState!: boolean
-  @Dialogs.Getter("getExportDialogState") SGET_getExportDialogState!: {prepickedValue: string[], prepickedDocumentTemplate: string}
+  @Dialogs.Getter("getExportDialogState") SGET_getExportDialogState!: { prepickedValue: string[], prepickedDocumentTemplate: string }
   @Dialogs.Mutation("setExportDialogState") SSET_setExportDialogState!: (input: string[], prepickedTemplateID?: string) => void
 
   /**
    * Refreshes the route
    */
-  refreshRoute () {
+  refreshRoute() {
     if (this.SGET_options.disableCloseAftertSelectQuickSearch && this.SGET_getDialogsState) {
       return
     }
@@ -569,7 +569,7 @@ export default class BaseClass extends Vue {
     }
     // If there are no documents inthe list, just navigate to the front page of the project
     else {
-      this.$router.push({ path: "/project" }).catch((e: {name: string}) => {
+      this.$router.push({ path: "/project" }).catch((e: { name: string }) => {
         if (e && e.name !== "NavigationDuplicated") {
           console.log(e)
         }
@@ -585,7 +585,7 @@ export default class BaseClass extends Vue {
   /**
    * Recursively retrieves a full hieararchical path from a full list
    */
-  getDocumentHieararchicalPath (document: I_OpenedDocument, list: I_OpenedDocument[]) {
+  getDocumentHieararchicalPath(document: I_OpenedDocument, list: I_OpenedDocument[]) {
     let hierarchicalString = ""
 
     // @ts-ignore
@@ -599,7 +599,7 @@ export default class BaseClass extends Vue {
       return hierarchicalString
     }
 
-    const matchingDoc = list.find((doc:I_OpenedDocument) => {
+    const matchingDoc = list.find((doc: I_OpenedDocument) => {
       return doc._id === parentDoc._id
     }) as I_OpenedDocument
 
@@ -615,7 +615,7 @@ export default class BaseClass extends Vue {
     return hierarchicalString
   }
 
-  mapShortDocument (doc: I_ShortenedDocument, dbDocuments: I_OpenedDocument[]) : I_ShortenedDocument {
+  mapShortDocument(doc: I_ShortenedDocument, dbDocuments: I_OpenedDocument[]): I_ShortenedDocument {
     return {
       label: doc.extraFields.find(e => e.id === "name")?.value,
       icon: doc.icon,
@@ -638,8 +638,8 @@ export default class BaseClass extends Vue {
     }
   }
 
-  deepFreeze (object: object) {
-  // Retrieve the property names defined on object
+  deepFreeze(object: object) {
+    // Retrieve the property names defined on object
     const propNames = Object.getOwnPropertyNames(object)
 
     // Freeze properties before freezing self
@@ -655,7 +655,7 @@ export default class BaseClass extends Vue {
     return Object.freeze(object)
   }
 
-  checkForLegacyDocuments () {
+  checkForLegacyDocuments() {
     return this.SGET_allDocuments.docs.filter(doc => {
       const localBlueprint = this.SGET_blueprint(doc.type)
       let hasLegacyValue = false
@@ -683,7 +683,7 @@ export default class BaseClass extends Vue {
     })
   }
 
-  openLink (link: string) {
+  openLink(link: string) {
     try {
       // @ts-ignore
       const url = new URL(link)
