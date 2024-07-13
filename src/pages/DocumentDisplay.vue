@@ -3,6 +3,7 @@
   class="documentDisplay"
   :id="'document-'+currentData._id"
   :class="{
+    'routeTransitionFinished': routeTransitionFinished,
     'q-pb-xl q-pl-xl q-pr-xl': disableDocumentControlBar,
     'q-pa-xl': !disableDocumentControlBar,
     'hiddenFields': (hideEmptyFields || retrieveFieldValue(currentData, 'finishedSwitch')),
@@ -500,34 +501,39 @@ export default class PageDocumentDisplay extends BaseClass {
    */
   @Watch("$route", { immediate: true, deep: true })
   async onUrlChange () {
-    // Multiple removes to avoid bug concerning hanging window listeners bugging out the memory
-    window.removeEventListener("scroll", this.watchPageScroll)
-    window.removeEventListener("scroll", this.watchPageScroll)
-    window.removeEventListener("scroll", this.watchPageScroll)
-
     this.documentTemplateList = await retrieveAllDocumentTemplatesFromDB()
     const doc = this.findRequestedOrActiveDocument() as I_OpenedDocument
+
     window.scrollTo({ top: 0, behavior: "auto" })
 
     this.reloadLocalContent()
 
-    setTimeout(() => {
-      const scrollTop = (doc.scrollDistance && !this.preventAutoScroll) ? doc.scrollDistance : 0
+    this.$nextTick(() => {
+      setTimeout(() => {
+        this.routeTransitionFinished = true
+      }, 50)
 
-      window.scrollTo({ top: scrollTop, behavior: "auto" })
+      setTimeout(() => {
+        const scrollTop = (doc.scrollDistance && !this.preventAutoScroll) ? doc.scrollDistance : 0
 
-      // Multiple removes to avoid bug concerning hanging window listeners bugging out the memory
-      window.removeEventListener("scroll", this.watchPageScroll)
-      window.removeEventListener("scroll", this.watchPageScroll)
-      window.removeEventListener("scroll", this.watchPageScroll)
+        window.scrollTo({ top: scrollTop, behavior: "auto" })
+      }, 100)
+    })
+  }
 
-      window.addEventListener("scroll", this.watchPageScroll)
-    }, 200)
+  created () {
+    window.addEventListener("scroll", this.watchPageScroll)
+  }
+
+  beforeDestroy () {
+    window.removeEventListener("scroll", this.watchPageScroll)
   }
 
   documentTemplateList: I_DocumentTemplate[] = []
 
   decounceScrollTimer = false as any
+
+  routeTransitionFinished = false
   watchPageScroll () {
     if (this.preventAutoScroll) {
       return
@@ -544,9 +550,11 @@ export default class PageDocumentDisplay extends BaseClass {
 
       dataCopy.scrollDistance = currentScroll
 
-      // Attempts to add current document to list
-      const dataPass = { doc: dataCopy, treeAction: false }
-      this.SSET_updateOpenedDocument(dataPass)
+      if (this.currentData._id !== undefined) {
+        // Attempts to add current document to list
+        const dataPass = { doc: dataCopy, treeAction: false }
+        this.SSET_updateOpenedDocument(dataPass)
+      }
     }, 100)
   }
 
@@ -1291,6 +1299,12 @@ export default class PageDocumentDisplay extends BaseClass {
 }
 
 .documentDisplay {
+  display: none !important;
+
+  &.routeTransitionFinished{
+    display: block !important;
+  }
+
   &.hiddenFields {
     padding-top: 105px;
   }
