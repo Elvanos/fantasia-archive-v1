@@ -22,9 +22,24 @@
               @keydown.enter.prevent="saveProjectSettings"
             />
           </div>
-
         </q-card-section>
 
+       <!--  <q-card-section>
+          <div class="row justify-center">
+            <q-item
+              v-for="blueprint in blueprintList"
+              :key="blueprint._id"
+              clickable
+              active-class="bg-gunmetal-light text-cultured"
+            >
+              <q-item-section avatar>
+                <q-icon :name="blueprint.icon" />
+              </q-item-section>
+              <q-item-section>{{blueprint.namePlural}}</q-item-section>
+            </q-item>
+          </div>
+        </q-card-section>
+ -->
         <q-card-actions align="around" class="q-mx-xl q-mt-lg q-mb-md">
           <q-btn
           flat
@@ -45,6 +60,7 @@
 <script lang="ts">
 
 import { Component, Watch } from "vue-property-decorator"
+import { I_Blueprint } from "src/interfaces/I_Blueprint"
 
 import DialogBase from "src/components/dialogs/_DialogBase"
 import { changeCurrentProjectSettings } from "src/scripts/projectManagement/projectManagent"
@@ -70,6 +86,10 @@ export default class ProjectSettingsDialog extends DialogBase {
   }
 
   projectName = ""
+
+  blueprintList: I_Blueprint[] = []
+
+  disabledBlueprintList: string[] = []
 
   reservedCharacterList = [
     "/",
@@ -112,10 +132,13 @@ export default class ProjectSettingsDialog extends DialogBase {
 
   reloadProjectSettings () {
     this.projectName = this.SGET_getProjectName
+    this.blueprintList = this.SGET_allBlueprints
   }
 
   async saveProjectSettings () {
-    if (this.isInvalid) return
+    if (this.isInvalid) {
+      return
+    }
 
     const newSettings = {
       projectName: this.projectName

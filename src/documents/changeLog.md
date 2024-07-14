@@ -7,6 +7,10 @@
 # Major, very sad annoucement
 - GitHub Actions (the compiler for multiple operating systems that I use) stopped supporting our MacOS version (MacOS11) and therefore I won't be able to automatically created Mac-builds for FA1 (new version will not have this issue). Perhaps this issues can be remedied if one compiles FA on their own Mac or if someone from the community with a Mac reaches out and managed to compile the newest FA version for you people, but as it stands now, I am sadly forced to remove direct support for any new pre-compiled Mac builds from now on.
 
+### Removed legacy features
+- Removed legacy document check (top right red button on the screen). If you will still require this feature, reinstall older version of FA (0.1.13), fix your project and then reinstall this one or newer.
+- Removed the "pre-0.1.7" warning at the bottom of the screen. If you still need this feature, it is accesible from the top menu: `Project -> Advanced project tools -> Repair legacy project"
+
 ### Known issues
 - Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
 - Loading existing project can very occasionally get stuck. Restarting the app fixes this.
@@ -22,6 +26,7 @@
 ### Bugfixes & Optimizations
 - Added text editor Full Screen mode persisting through tab-swapping
 - Fixed auto-scroll on tab-swapping
+- Fixed buggy window scrolling event listener memory leak
 - Fixed `@` insert in text editors removing white lines before it and attaching itself to the previous text
 
 ## 0.1.13

@@ -32,8 +32,8 @@ export const createNewProject = async (projectName: string, vueRouter: any, quas
 
   /*eslint-disable */
   // @ts-ignore
-  vueRouter.push({ path: "/" }).catch((e: {name: string}) => {
-    const errorName : string = e.name
+  vueRouter.push({ path: "/" }).catch((e: { name: string }) => {
+    const errorName: string = e.name
     if (errorName === "NavigationDuplicated") {
       return
     }
@@ -45,8 +45,8 @@ export const createNewProject = async (projectName: string, vueRouter: any, quas
 
   /*eslint-disable */
   // @ts-ignore
-  vueRouter.push({ path: "/project" }).catch((e: {name: string}) => {
-    const errorName : string = e.name
+  vueRouter.push({ path: "/project" }).catch((e: { name: string }) => {
+    const errorName: string = e.name
     if (errorName === "NavigationDuplicated") {
       return
     }
@@ -71,55 +71,55 @@ export const saveProject = (projectName: string, Loading: any, loadingSetup: any
     properties: ["openDirectory"]
   }).then(async (result) => {
     /*eslint-disable */
-      const folderPath = result.filePaths[0]
+    const folderPath = result.filePaths[0]
 
-      if (!folderPath) {
-        return
-      }
+    if (!folderPath) {
+      return
+    }
 
-      Loading.show(loadingSetup)
+    Loading.show(loadingSetup)
 
-      PouchDB.plugin(replicationStream.plugin)
-      // @ts-ignore
-      PouchDB.adapter("writableStream", replicationStream.adapters.writableStream)
+    PouchDB.plugin(replicationStream.plugin)
+    // @ts-ignore
+    PouchDB.adapter("writableStream", replicationStream.adapters.writableStream)
 
-      // @ts-ignore
-      const allDBS = await indexedDB.databases()
+    // @ts-ignore
+    const allDBS = await indexedDB.databases()
 
-      const DBnames: string[] = allDBS
-      .filter((d: {name: string}) => d.name !== '_pouch_fa-settings')
-      .map((db: {name: string}) => {
+    const DBnames: string[] = allDBS
+      .filter((d: { name: string }) => d.name !== '_pouch_fa-settings')
+      .map((db: { name: string }) => {
         return db.name.replace("_pouch_", "")
       })
 
-      for (const db of DBnames) {
-        window.FA_dbs[db] = new PouchDB(db)
+    for (const db of DBnames) {
+      window.FA_dbs[db] = new PouchDB(db)
 
-        if (!fs.existsSync(`${folderPath}`)) {
-          fs.mkdirSync(`${folderPath}`)
-        }
-
-        // Check if this is a nested folder or not
-        const isProjectFolder = fs.existsSync(`${folderPath}/project-data.txt`)
-        const projectPath = (isProjectFolder)
-          ? `${folderPath}`
-          : `${folderPath}/${projectName}`
-
-        if (!fs.existsSync(projectPath)) {
-          fs.mkdirSync(projectPath)
-        }
-        const ws = fs.createWriteStream(`${projectPath}/${db}.txt`)
-
-        // @ts-ignore
-        await window.FA_dbs[db].dump(ws)
-
+      if (!fs.existsSync(`${folderPath}`)) {
+        fs.mkdirSync(`${folderPath}`)
       }
 
-      Loading.hide()
-      quasar.notify({
-        type: 'positive',
-        message: `Project succesfully saved`
-      })
+      // Check if this is a nested folder or not
+      const isProjectFolder = fs.existsSync(`${folderPath}/project-data.txt`)
+      const projectPath = (isProjectFolder)
+        ? `${folderPath}`
+        : `${folderPath}/${projectName}`
+
+      if (!fs.existsSync(projectPath)) {
+        fs.mkdirSync(projectPath)
+      }
+      const ws = fs.createWriteStream(`${projectPath}/${db}.txt`)
+
+      // @ts-ignore
+      await window.FA_dbs[db].dump(ws)
+
+    }
+
+    Loading.hide()
+    quasar.notify({
+      type: 'positive',
+      message: `Project succesfully saved`
+    })
     /* eslint-enable */
   }).catch(err => {
     console.log(err)
@@ -131,21 +131,21 @@ export const saveProject = (projectName: string, Loading: any, loadingSetup: any
  */
 export const removeCurrentProject = async () => {
   /*eslint-disable */
-    // @ts-ignore
-    const allDBS = await indexedDB.databases()
+  // @ts-ignore
+  const allDBS = await indexedDB.databases()
 
-    const DBnames: string[] = allDBS
-    .filter((d: {name: string}) => d.name !== '_pouch_fa-settings')
-    .map((db: {name: string}) => {
+  const DBnames: string[] = allDBS
+    .filter((d: { name: string }) => d.name !== '_pouch_fa-settings')
+    .map((db: { name: string }) => {
       return db.name.replace("_pouch_", "")
     })
 
 
-    for (const db of DBnames) {
-      window.FA_dbs[db] = new PouchDB(db)
-      await window.FA_dbs[db].destroy()
-    }
-    /* eslint-enable */
+  for (const db of DBnames) {
+    window.FA_dbs[db] = new PouchDB(db)
+    await window.FA_dbs[db].destroy()
+  }
+  /* eslint-enable */
 }
 
 /**
@@ -194,8 +194,8 @@ export const loadExistingProject = (vueRouter: any, Loading: any, loadingSetup: 
 
     /*eslint-disable */
     // @ts-ignore
-    vueRouter.push({ path: "/" }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+    vueRouter.push({ path: "/" }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -207,8 +207,8 @@ export const loadExistingProject = (vueRouter: any, Loading: any, loadingSetup: 
 
     /*eslint-disable */
     // @ts-ignore
-    vueRouter.push({ path: "/project" }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+    vueRouter.push({ path: "/project" }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -274,8 +274,8 @@ export const mergeExistingProject = (vueRouter: any, Loading: any, loadingSetup:
 
     /*eslint-disable */
     // @ts-ignore
-    vueRouter.push({ path: "/" }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+    vueRouter.push({ path: "/" }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -287,8 +287,8 @@ export const mergeExistingProject = (vueRouter: any, Loading: any, loadingSetup:
 
     /*eslint-disable */
     // @ts-ignore
-    vueRouter.push({ path: "/project" }).catch((e: {name: string}) => {
-      const errorName : string = e.name
+    vueRouter.push({ path: "/project" }).catch((e: { name: string }) => {
+      const errorName: string = e.name
       if (errorName === "NavigationDuplicated") {
         return
       }
@@ -330,6 +330,25 @@ export const retrieveCurrentProjectName = async () => {
 }
 
 /**
+ * Retrieves current project disabled document type list
+ */
+export const retrieveCurrentProjectDisabledDocumentTypes = async () => {
+  if (!window.FA_dbs) {
+    // @ts-ignore
+    window.FA_dbs = {}
+  }
+  window.FA_dbs["project-data"] = new PouchDB("project-data")
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const projectData = await window.FA_dbs["project-data"].allDocs({ include_docs: true })
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
+  const disabledDocumentTypes: string = projectData?.rows[0]?.doc?.disabledDocumentTypes
+
+  return (disabledDocumentTypes) || ""
+}
+
+/**
  * Retrieves current project custom CSS
  */
 export const retrieveCurrentProjectCustomCSS = async () => {
@@ -354,6 +373,7 @@ export const retrieveCurrentProjectCustomCSS = async () => {
 export const changeCurrentProjectSettings = async (input: {
   projectName?: string,
   projectCustomCSS?: string
+  disabledDocumentTypes?: string[]
 }) => {
   if (!window.FA_dbs) {
     // @ts-ignore
@@ -369,6 +389,10 @@ export const changeCurrentProjectSettings = async (input: {
 
   if (input.projectCustomCSS) {
     projectData.rows[0].doc.projectCustomCSS = input.projectCustomCSS
+  }
+
+  if (input.disabledDocumentTypes) {
+    projectData.rows[0].doc.disabledDocumentTypes = input.disabledDocumentTypes
   }
 
   console.log(projectData.rows[0].doc)

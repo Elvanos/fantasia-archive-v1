@@ -7,7 +7,7 @@
       @trigger-dialog-close="repairProjectDialogClose"
     />
 
-     <q-dialog v-model="pre017check" seamless position="bottom">
+    <!--  <q-dialog v-model="pre017check" seamless position="bottom">
       <q-card style="width: 100vw; min-width: 100vw;" dark class="text-accent bg-secondary">
 
         <q-card-section class="row items-center no-wrap justify-center">
@@ -18,7 +18,7 @@
           <q-btn outline round icon="close" v-close-popup @click="close017Notification" class="notifClose" />
         </q-card-section>
       </q-card>
-    </q-dialog>
+    </q-dialog> -->
 
     <!-- Header -->
     <appHeader/>
@@ -60,7 +60,7 @@
             <router-view :key="$route.path" />
           </transition>
 
-          <q-page-sticky
+          <!-- <q-page-sticky
             style="z-index: 1000;"
              position="top-right" :offset="[18, 75]">
             <q-btn
@@ -78,7 +78,7 @@
                 Check for documents with legacy values
               </q-tooltip>
             </q-btn>
-          </q-page-sticky>
+          </q-page-sticky> -->
 
           </q-page-container>
         </template>
