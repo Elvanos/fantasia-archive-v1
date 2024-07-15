@@ -9,7 +9,7 @@
 
 ### Removed legacy features
 - Removed legacy document check (top right red button on the screen). If you will still require this feature, reinstall older version of FA (0.1.13), fix your project and then reinstall this one or newer.
-- Removed the "pre-0.1.7" warning at the bottom of the screen. If you still need this feature, it is accesible from the top menu: `Project -> Advanced project tools -> Repair legacy project"
+- Removed the "pre-0.1.7" warning at the bottom of the screen. If you still need this feature, it is accessible from the top menu: `Project -> Advanced project tools -> Repair legacy project"
 
 ### Known issues
 - Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
