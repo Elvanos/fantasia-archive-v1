@@ -29,6 +29,7 @@
 - Fixed auto-scroll on tab-swapping
 - Fixed buggy window scrolling event listener memory leak
 - Fixed `@` insert in text editors removing white lines before it and attaching itself to the previous text
+- Fixed buggy text wrapping in editor (text wasn't wrapping in `<div>` tag properly)
 
 ## 0.1.13
 

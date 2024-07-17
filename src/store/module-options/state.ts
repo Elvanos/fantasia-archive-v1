@@ -51,7 +51,7 @@ export interface OptionsStateInteface {
   legacyFieldsCheck018?: boolean
 }
 
-function state(): OptionsStateInteface {
+function state (): OptionsStateInteface {
   return {
     _id: "settings",
     darkMode: false,

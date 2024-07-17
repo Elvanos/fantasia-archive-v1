@@ -186,6 +186,30 @@ export default class Field_Wysiwyg extends FieldBase {
   processInput () {
     clearTimeout(this.pullTimer)
     this.pullTimer = setTimeout(() => {
+      // Fist for HTML -> Body -> List of actual nodes
+      let finalString = ""
+      const nodeList = new DOMParser().parseFromString(this.localInput, "text/html").childNodes[0].childNodes[1].childNodes
+
+      nodeList.forEach((node: Node) => {
+        let additionalString = ""
+
+        if (node.nodeType === 3 && node.textContent !== null && node.textContent.trim().length > 1) {
+          additionalString = `<div>${node.textContent}</div>`
+        }
+
+        if (node.nodeType === 1) {
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          additionalString = node.outerHTML
+        }
+
+        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        finalString = finalString + additionalString
+      })
+
+      this.localInput = finalString
+
       this.signalInput()
     }, 500)
   }
