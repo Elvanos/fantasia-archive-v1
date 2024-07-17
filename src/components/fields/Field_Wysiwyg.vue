@@ -57,6 +57,9 @@
       v-if="editMode"
       :definitions="definitions"
       min-height="350px"
+      :class="{
+        'limitEditorHeight': limitEditorHeight
+      }"
       @keypress.native="handleEditorKeypress"
       @click.native="handleEditorClick"
       @contextmenu="handleRightClick($event)"
@@ -90,6 +93,20 @@ import WISIWYG_changeImagePath from "src/components/dialogs/WISIWYG_changeImageP
   }
 })
 export default class Field_Wysiwyg extends FieldBase {
+  /****************************************************************/
+  // LOCAL SETTINGS
+  /****************************************************************/
+
+  /**
+   * React to changes on the options store
+   */
+  @Watch("SGET_options", { immediate: true, deep: true })
+  onSettingsChange () {
+    this.limitEditorHeight = this.SGET_options.limitEditorHeight
+  }
+
+  limitEditorHeight = false
+
   /****************************************************************/
   // BASIC FIELD DATA
   /****************************************************************/

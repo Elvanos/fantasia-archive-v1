@@ -22,6 +22,7 @@
 - Added `F11` keybind as alternative way to toggle Editor full screen mode
 - Added option to rebind the Editor full-screen mode keybind
 - Added auto-scroll on tab-swapping inside full-screen editors
+- Added a setting for limit text editor height when not using full-screen mode.
 
 ### Bugfixes & Optimizations
 - Added text editor Full Screen mode persisting through tab-swapping

@@ -38,6 +38,7 @@ export interface OptionsStateInteface {
   hideTreeIconView: boolean
   hidePlushes: boolean
   showDocumentID: boolean
+  limitEditorHeight: boolean
 
   preventPreviewsTree: boolean
   preventPreviewsTabs: boolean
@@ -50,7 +51,7 @@ export interface OptionsStateInteface {
   legacyFieldsCheck018?: boolean
 }
 
-function state (): OptionsStateInteface {
+function state(): OptionsStateInteface {
   return {
     _id: "settings",
     darkMode: false,
@@ -90,6 +91,7 @@ function state (): OptionsStateInteface {
     hideTreeIconEdit: false,
     hideTreeIconView: false,
     showDocumentID: false,
+    limitEditorHeight: false,
     preventPreviewsTree: true,
     preventPreviewsTabs: true,
     preventPreviewsPopups: false,

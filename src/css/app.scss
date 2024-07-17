@@ -137,6 +137,12 @@ img {
   img{
     display: block;
   }
+
+  &.limitEditorHeight:not(.fullscreen){
+    .q-editor__content{
+      max-height: calc(100vh - 300px);
+    }
+  }
 }
 
 .q-notification__caption {

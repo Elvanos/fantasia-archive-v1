@@ -397,6 +397,21 @@
 
                   <div class="col-12 col-md-6 col-lg-4 optionWrapper">
                     <div class="optionTitle">
+                      Limit text editor height
+                    <q-icon name="mdi-help-circle" size="16px" class="q-ml-md">
+                      <q-tooltip :delay="500">
+                        Determines if the text editor has limited height if not in full-screen mode.
+                      </q-tooltip>
+                    </q-icon>
+                    </div>
+
+                      <q-toggle
+                        v-model="options.limitEditorHeight"
+                      />
+                  </div>
+
+                  <div class="col-12 col-md-6 col-lg-4 optionWrapper">
+                    <div class="optionTitle">
                       DEVELOPMENT - Show document IDs
                     <q-icon name="mdi-help-circle" size="16px" class="q-ml-md">
                       <q-tooltip :delay="500">
@@ -856,7 +871,6 @@
                       </q-tooltip>
                     </q-icon>
                     </div>
-
                       <q-toggle
                         v-model="options.preventPreviewsTabs"
                       />
@@ -1136,6 +1150,7 @@ export default class ProgramSettings extends DialogBase {
     hideTreeIconAddUnder: false,
     hideTreeIconEdit: false,
     hideTreeIconView: false,
+    limitEditorHeight: false,
     preventPreviewsTree: true,
     preventPreviewsTabs: true,
     preventPreviewsPopups: false,
