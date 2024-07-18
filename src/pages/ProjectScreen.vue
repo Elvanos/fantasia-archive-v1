@@ -789,6 +789,7 @@ body.body--dark {
   overflow-y: hidden;
   max-width: calc(100% - 110px);
   width: 990px;
+  margin: auto;
 
   &.-fullsize {
     width: 100%;

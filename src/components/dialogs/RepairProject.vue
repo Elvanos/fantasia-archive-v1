@@ -12,10 +12,7 @@
 
         <q-card-section class="row justify-center q-mx-xl">
           <div>
-            If you are working with project created (or added via Merge) before version 0.1.7, this process might significantly improve your performance.
-            <br>
-            <br>
-            However, before proceeding, please save your current project first to prevent a <span class="text-bold text-secondary">POSSIBLE CORRUPTION</span> of your current project data!
+             Before proceeding, please save your current project first to prevent a <span class="text-bold text-secondary">POSSIBLE CORRUPTION</span> of your current project data!
           </div>
         </q-card-section>
 
@@ -90,7 +87,7 @@ import { extend, Loading, QSpinnerGears } from "quasar"
 import { Component, Watch } from "vue-property-decorator"
 
 import DialogBase from "src/components/dialogs/_DialogBase"
-import { saveProject } from "src/scripts/projectManagement/projectManagent"
+import { changeCurrentProjectSettings, saveProject } from "src/scripts/projectManagement/projectManagent"
 
 import { I_ShortenedDocument } from "src/interfaces/I_OpenedDocument"
 import { I_Blueprint } from "src/interfaces/I_Blueprint"
@@ -176,6 +173,11 @@ export default class RepairProjectDialog extends DialogBase {
     const optionsSnapShot = extend(true, {}, this.SGET_options)
     // @ts-ignore
     optionsSnapShot.pre017check = false
+
+    await changeCurrentProjectSettings({
+      createdOnVersion: remote.app.getVersion()
+    })
+
     // @ts-ignore
     this.SSET_options(optionsSnapShot)
   }

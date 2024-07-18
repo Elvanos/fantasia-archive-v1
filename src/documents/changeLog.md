@@ -9,7 +9,6 @@
 
 ### Removed legacy features
 - Removed legacy document check (top right red button on the screen). If you will still require this feature, reinstall older version of FA (0.1.13), fix your project and then reinstall this one or newer.
-- Removed the "pre-0.1.7" warning at the bottom of the screen. If you still need this feature, it is accessible from the top menu: `Project -> Advanced project tools -> Repair legacy project"
 
 ### Known issues
 - Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
@@ -23,13 +22,18 @@
 - Added option to rebind the Editor full-screen mode keybind
 - Added auto-scroll on tab-swapping inside full-screen editors
 - Added a setting for limit text editor height when not using full-screen mode.
+- Added developer data on what version of FA the project was created on.
 
 ### Bugfixes & Optimizations
 - Added text editor Full Screen mode persisting through tab-swapping
 - Fixed auto-scroll on tab-swapping
+- Fixed auto-focus in text editor when toggling full-screen mode
 - Fixed buggy window scrolling event listener memory leak
 - Fixed `@` insert in text editors removing white lines before it and attaching itself to the previous text
 - Fixed buggy text wrapping in editor (text wasn't wrapping in `<div>` tag properly)
+- Fixed search-box (CTRL + F) not working in full-screen mode (please note that the search is acting a little weird in regards to auto-scrolling in the fullscreen mode, but at least it somewhat works instead of not working at all)
+- Fixed welcome screen/project overview not properly horizontally centering
+- Reworded repair-popup wording and changed the bottom red-alert wording along with behavior
 
 ## 0.1.13
 

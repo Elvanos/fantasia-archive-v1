@@ -118,6 +118,14 @@ img {
   max-width: 100%;
 }
 
+.q-header{
+  z-index: 7000 !important;
+}
+
+.q-dialog{
+  z-index: 8000 !important;
+}
+
 .doc-token{
   display: inline-block;
   padding: 4px 6px;
@@ -939,4 +947,5 @@ font[size="7"] {
 .find-box{
   top: auto !important;
   bottom: 5px !important;
+  z-index: 6500 !important;
 }

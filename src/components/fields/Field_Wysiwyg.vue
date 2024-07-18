@@ -394,6 +394,7 @@ export default class Field_Wysiwyg extends FieldBase {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       editor.exitFullscreen()
+      editor.focus()
     }
     else {
       this.signalFullScreenStatusChange()
@@ -401,6 +402,7 @@ export default class Field_Wysiwyg extends FieldBase {
       // @ts-ignore
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       editor.setFullscreen()
+      editor.focus()
     }
   }
 

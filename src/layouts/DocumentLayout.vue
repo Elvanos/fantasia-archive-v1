@@ -7,18 +7,18 @@
       @trigger-dialog-close="repairProjectDialogClose"
     />
 
-    <!--  <q-dialog v-model="pre017check" seamless position="bottom">
+    <q-dialog v-model="pre017check" seamless position="bottom">
       <q-card style="width: 100vw; min-width: 100vw;" dark class="text-accent bg-secondary">
 
         <q-card-section class="row items-center no-wrap justify-center">
           <div>
-            If you are working with a pre-0.1.7 version project, then please <span class="q-mx-lg"><q-btn outline label="Repair your project" color="accent" @click="repairProjectAssignUID" /></span>
+            Please check your project for bugged documents. This needs to be done only once! <span class="q-mx-lg"><q-btn outline label="Repair your project" color="accent" @click="repairProjectAssignUID" /></span>
           </div>
 
-          <q-btn outline round icon="close" v-close-popup @click="close017Notification" class="notifClose" />
+          <q-btn outline round icon="close" v-close-popup class="notifClose" />
         </q-card-section>
       </q-card>
-    </q-dialog> -->
+    </q-dialog>
 
     <!-- Header -->
     <appHeader/>
@@ -283,12 +283,6 @@ export default class DocumentLayout extends BaseClass {
    * Snapshop of the current settings in the store for further modification
    */
   optionsSnapShot = {} as OptionsStateInteface
-
-  close017Notification () {
-    this.optionsSnapShot = extend(true, {}, this.SGET_options)
-    this.optionsSnapShot.pre017check = false
-    this.SSET_options(this.optionsSnapShot)
-  }
 
   openLegacyDocuments () {
     const legacyDocs = this.checkForLegacyDocuments()

@@ -24,7 +24,8 @@ export const createNewProject = async (projectName: string, vueRouter: any, quas
   window.FA_dbs["project-data"] = new PouchDB("project-data")
   const newProject = {
     _id: "projectSetup",
-    projectName: projectName
+    projectName: projectName,
+    createdOnVersion: remote.app.getVersion()
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
@@ -188,7 +189,8 @@ export const loadExistingProject = (vueRouter: any, Loading: any, loadingSetup: 
     // @ts-ignore
     optionsSnapShot.legacyFieldsCheck018 = true
     // @ts-ignore
-    optionsSnapShot.pre017check = true
+    optionsSnapShot.pre017check = (await retrieveCurrentProjectVersion() < 0.017)
+
     // @ts-ignore
     vueInstance.SSET_options(optionsSnapShot)
 
@@ -268,7 +270,7 @@ export const mergeExistingProject = (vueRouter: any, Loading: any, loadingSetup:
     // @ts-ignore
     optionsSnapShot.legacyFieldsCheck018 = true
     // @ts-ignore
-    optionsSnapShot.pre017check = true
+    optionsSnapShot.pre017check = (await retrieveCurrentProjectVersion() < 0.017)
     // @ts-ignore
     vueInstance.SSET_options(optionsSnapShot)
 
@@ -330,9 +332,9 @@ export const retrieveCurrentProjectName = async () => {
 }
 
 /**
- * Retrieves current project disabled document type list
+ * Retrieves current project name
  */
-export const retrieveCurrentProjectDisabledDocumentTypes = async () => {
+export const retrieveCurrentProjectVersion = async () => {
   if (!window.FA_dbs) {
     // @ts-ignore
     window.FA_dbs = {}
@@ -343,9 +345,20 @@ export const retrieveCurrentProjectDisabledDocumentTypes = async () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 
-  const disabledDocumentTypes: string = projectData?.rows[0]?.doc?.disabledDocumentTypes
+  let projectVersion: string = (projectData?.rows[0]?.doc?.createdOnVersion)
+  let projectVersionNumber = 0
 
-  return (disabledDocumentTypes) || ""
+  console.log(projectVersion)
+
+  if (projectVersion) {
+    projectVersion = projectVersion.replace(/\./g, "")
+    console.log(projectVersion)
+    projectVersion = projectVersion.slice(0, 1) + "." + projectVersion.slice(1)
+    console.log(projectVersion)
+    projectVersionNumber = Number(projectVersion)
+  }
+
+  return projectVersionNumber
 }
 
 /**
@@ -372,8 +385,8 @@ export const retrieveCurrentProjectCustomCSS = async () => {
  */
 export const changeCurrentProjectSettings = async (input: {
   projectName?: string,
+  createdOnVersion?: string
   projectCustomCSS?: string
-  disabledDocumentTypes?: string[]
 }) => {
   if (!window.FA_dbs) {
     // @ts-ignore
@@ -391,11 +404,9 @@ export const changeCurrentProjectSettings = async (input: {
     projectData.rows[0].doc.projectCustomCSS = input.projectCustomCSS
   }
 
-  if (input.disabledDocumentTypes) {
-    projectData.rows[0].doc.disabledDocumentTypes = input.disabledDocumentTypes
+  if (input.createdOnVersion) {
+    projectData.rows[0].doc.createdOnVersion = input.createdOnVersion
   }
-
-  console.log(projectData.rows[0].doc)
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   await window.FA_dbs["project-data"].put(projectData.rows[0].doc)
