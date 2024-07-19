@@ -12,7 +12,7 @@
 
         <q-card-section class="row items-center no-wrap justify-center">
           <div>
-            Please check your project for bugged documents. This needs to be done only once! <span class="q-mx-lg"><q-btn outline label="Repair your project" color="accent" @click="repairProjectAssignUID" /></span>
+            Please check your project for possible issues with documents. This needs to be done only once! <span class="q-mx-lg"><q-btn outline label="Repair your project" color="accent" @click="repairProjectAssignUID" /></span>
           </div>
 
           <q-btn outline round icon="close" v-close-popup class="notifClose" />
