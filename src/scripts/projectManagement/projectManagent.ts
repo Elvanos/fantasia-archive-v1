@@ -54,6 +54,14 @@ export const createNewProject = async (projectName: string, vueRouter: any, quas
     console.log(e)
   })
 
+  const optionsSnapShot = extend(true, {}, vueInstance.SGET_options)
+  // @ts-ignore
+  optionsSnapShot.legacyFieldsCheck018 = true
+  // @ts-ignore
+  optionsSnapShot.pre017check = (await retrieveCurrentProjectVersion() < 0.017)
+  // @ts-ignore
+  vueInstance.SSET_options(optionsSnapShot)
+
   quasar.notify({
     type: 'positive',
     message: `New project succesfully created`
