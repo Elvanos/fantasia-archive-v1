@@ -6,6 +6,7 @@
 
 # Major, very sad annoucement
 - GitHub Actions (the compiler for multiple operating systems that I use) stopped supporting our MacOS version (MacOS11) and therefore I won't be able to automatically created Mac-builds for FA1 (new version will not have this issue). Perhaps this issues can be remedied if one compiles FA on their own Mac or if someone from the community with a Mac reaches out and managed to compile the newest FA version for you people, but as it stands now, I am sadly forced to remove direct support for any new pre-compiled Mac builds from now on.
+- This issue might be temporarily fixed by a dear friend of mine offering a pre-M-series Mac for compilation at least for the time being - This is not a permanent solution, but should at least work for the current version in the time of writing this (0.1.14).
 
 ### Removed legacy features
 - Removed legacy document check (top right red button on the screen). If you will still require this feature, reinstall older version of FA (0.1.13), fix your project and then reinstall this one or newer.
