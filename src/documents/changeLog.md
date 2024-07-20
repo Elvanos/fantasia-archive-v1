@@ -35,6 +35,7 @@
 - Fixed search-box (CTRL + F) not working in full-screen mode (please note that the search is acting a little weird in regards to auto-scrolling in the fullscreen mode, but at least it somewhat works instead of not working at all)
 - Fixed welcome screen/project overview not properly horizontally centering
 - Reworded repair-popup wording and changed the bottom red-alert wording along with behavior
+- Removed `CTRL + Q` keybind for "Quote" command in text editor mode, because it was conflicting with default "Open existing document" for quick search
 
 ## 0.1.13
 

@@ -451,6 +451,10 @@ export default class Field_Wysiwyg extends FieldBase {
       icon: "image",
       label: "",
       handler: this.WISIWYG_insertImageChoiceAssignUID
+    },
+    quote: {
+      tip: "Quote",
+      key: false
     }
   }
 
