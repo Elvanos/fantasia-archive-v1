@@ -1299,10 +1299,10 @@ export default class PageDocumentDisplay extends BaseClass {
 }
 
 .documentDisplay {
-  display: none !important;
+  visibility: hidden !important;
 
   &.routeTransitionFinished{
-    display: block !important;
+    visibility: visible !important;
   }
 
   &.hiddenFields {
