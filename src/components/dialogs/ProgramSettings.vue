@@ -186,6 +186,21 @@
                       />
                   </div>
 
+                  <div class="col-12 col-md-6 col-lg-4 optionWrapper">
+                    <div class="optionTitle">
+                      Accessibility - Wider scrollbars
+                    <q-icon name="mdi-help-circle" size="16px" class="q-ml-md">
+                      <q-tooltip :delay="500">
+                        This setting makes FA's scrollbar wider and therefore allow support for manual clik-scrolling directly on them for devices that do not support standard scrolling (mice without a scrollwheel, etc).
+                      </q-tooltip>
+                    </q-icon>
+                    </div>
+
+                      <q-toggle
+                        v-model="options.allowWiderScrollbars"
+                      />
+                  </div>
+
                   <div class="col-12">
                     <div class="text-bold q-mt-xl">
                       Application extras
@@ -1122,6 +1137,7 @@ export default class ProgramSettings extends DialogBase {
     hideAdvSearchCheatsheetButton: false,
     doubleDashDocCount: false,
     hideDeadCrossThrough: false,
+    allowWiderScrollbars: false,
     hidePlushes: false,
     hideDocumentTitles: false,
     hideHierarchyTree: false,

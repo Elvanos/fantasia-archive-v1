@@ -11,6 +11,7 @@ export interface OptionsStateInteface {
   hideDeadCrossThrough: boolean
   doubleDashDocCount: boolean
   hideWelcomeScreenSocials: boolean
+  allowWiderScrollbars: boolean
   hideHierarchyTree: boolean
   noTags: boolean
   tagsAtTop: boolean
@@ -64,6 +65,7 @@ function state (): OptionsStateInteface {
     hideDeadCrossThrough: false,
     doubleDashDocCount: false,
     hideWelcomeScreenSocials: false,
+    allowWiderScrollbars: false,
     hideDocumentTitles: false,
     hidePlushes: false,
     hideHierarchyTree: false,

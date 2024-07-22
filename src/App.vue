@@ -3,6 +3,8 @@
 
     <component v-bind:is="'style'" type="text/css" v-html="customCSS"></component>
 
+    <component v-if="allowWiderScrollbars" v-bind:is="'style'" type="text/css" v-html="widerScrollBarCSSS"></component>
+
     <appWindowButtons />
     <router-view />
 
@@ -341,6 +343,7 @@ export default class App extends BaseClass {
     const options = this.SGET_options
 
     this.hidePlushes = options.hidePlushes
+    this.allowWiderScrollbars = options.allowWiderScrollbars
     this.$q.dark.set(options.darkMode)
     if (options.darkMode) {
       colors.setBrand("dark", "#1b333e")
@@ -368,6 +371,8 @@ export default class App extends BaseClass {
    * Hides the mascot... nooo :(
    */
   hidePlushes = false
+
+  allowWiderScrollbars = false
 
   @Watch("SGET_getAdvSearchWindowVisible")
   onAdvSearchWindowOpen () {
@@ -484,6 +489,8 @@ export default class App extends BaseClass {
   /****************************************************************/
   // CUSTOM CSS ATTACHING
   /****************************************************************/
+
+  widerScrollBarCSSS = "*::-webkit-scrollbar{width: 15px !important; height: 15px !important;}"
 
   customCSS = ""
 

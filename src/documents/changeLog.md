@@ -2,6 +2,20 @@
 
 ---
 
+## 0.1.14a
+
+### Known issues
+- Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
+- Loading existing project can very occasionally get stuck. Restarting the app fixes this.
+- Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway).
+
+### Bugfixes & Optimizations
+- Fixed input textareas not autogrowing properly when switching document tabs
+
+### New features
+- Added setting for accesibility wider scroll bars inside the app
+
+
 ## 0.1.14
 
 ### Major, very sad announcement
