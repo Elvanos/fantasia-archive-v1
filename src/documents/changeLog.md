@@ -5,16 +5,20 @@
 ## 0.1.14a
 
 ### Known issues
-- Creating a brand new project can very occasionally get stuck. Restarting the app fixes this.
-- Loading existing project can very occasionally get stuck. Restarting the app fixes this.
-- Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway).
+- Creating a brand new project can very occasionally get stuck. Restarting the app fixes this
+- Loading existing project can very occasionally get stuck. Restarting the app fixes this
+- Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway)
+- Using the `@` functionality inside the text editor while picking the desired document to link causes a glitch when using keyboard selection. Please stick to using mouse to avoid this iussue
 
 ### Bugfixes & Optimizations
 - Fixed input textareas not autogrowing properly when switching document tabs
+- Fixed padding not applying properly inside nested divs inside the text editor field
+
+### Removed features
+- Automatic text wrapping in editor inside of `<div>` tags which was causing more bugs that it was solving
 
 ### New features
 - Added setting for accesibility wider scroll bars inside the app
-
 
 ## 0.1.14
 

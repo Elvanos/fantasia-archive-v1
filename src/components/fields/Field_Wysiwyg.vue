@@ -187,7 +187,7 @@ export default class Field_Wysiwyg extends FieldBase {
     clearTimeout(this.pullTimer)
     this.pullTimer = setTimeout(() => {
       // Fist for HTML -> Body -> List of actual nodes
-      let finalString = ""
+      /*       let finalString = ""
       const nodeList = new DOMParser().parseFromString(this.localInput, "text/html").childNodes[0].childNodes[1].childNodes
 
       nodeList.forEach((node: Node) => {
@@ -208,7 +208,7 @@ export default class Field_Wysiwyg extends FieldBase {
         finalString = finalString + additionalString
       })
 
-      this.localInput = finalString
+      this.localInput = finalString */
 
       this.signalInput()
     }, 500)
