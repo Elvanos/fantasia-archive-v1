@@ -191,7 +191,7 @@
                       Accessibility - Wider scrollbars
                     <q-icon name="mdi-help-circle" size="16px" class="q-ml-md">
                       <q-tooltip :delay="500">
-                        This setting makes FA's scrollbar wider and therefore allow support for manual clik-scrolling directly on them for devices that do not support standard scrolling (mice without a scrollwheel, etc).
+                        This setting makes FA's scrollbar wider and therefore allow support for manual click-scrolling directly on them for devices that do not support standard scrolling (mice without a scrollwheel, etc).
                       </q-tooltip>
                     </q-icon>
                     </div>
