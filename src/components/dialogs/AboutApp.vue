@@ -127,7 +127,7 @@ export default class AboutApp extends DialogBase {
    * Open GitHub link in thw default browser window
    */
   openGithubLink () {
-    shell.openExternal("https://github.com/Elvanos/fantasia-archive").catch(e => console.log(e))
+    shell.openExternal("https://github.com/Elvanos/fantasia-archive-v1").catch(e => console.log(e))
   }
 }
 </script>
