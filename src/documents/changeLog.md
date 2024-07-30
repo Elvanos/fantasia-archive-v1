@@ -2,13 +2,29 @@
 
 ---
 
+## 0.1.15
+
+### Known issues
+- Creating a brand new project can very occasionally get stuck. Restarting the app fixes this
+- Loading existing project can very occasionally get stuck. Restarting the app fixes this
+- Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway)
+- Using the `@` functionality inside the text editor while picking the desired document to link causes a glitch when using keyboard selection. Please stick to using mouse to avoid this issue
+
+### Bugfixes & Optimizations
+- Fixed some tooltip typos around the app
+- Fixed GitHub links for the current version of FA on welcome screen and in the menu
+
+### New features
+- Added "Program Tutorials" button to the "Help & Info"menu
+- Added FA tutorial support and all the guides
+
 ## 0.1.14a
 
 ### Known issues
 - Creating a brand new project can very occasionally get stuck. Restarting the app fixes this
 - Loading existing project can very occasionally get stuck. Restarting the app fixes this
 - Saving documents can sometimes leave it in edit mode instead of closing it (data gets saved anyway)
-- Using the `@` functionality inside the text editor while picking the desired document to link causes a glitch when using keyboard selection. Please stick to using mouse to avoid this iussue
+- Using the `@` functionality inside the text editor while picking the desired document to link causes a glitch when using keyboard selection. Please stick to using mouse to avoid this issue
 
 ### Bugfixes & Optimizations
 - Fixed input textareas not autogrowing properly when switching document tabs

@@ -75,6 +75,12 @@
       @trigger-dialog-close="programSettingsDialogClose"
     />
 
+    <!-- Program tutorials dialog -->
+    <programTutorialsDialog
+      :dialog-trigger="programTutorialsDialogTrigger"
+      @trigger-dialog-close="programTutorialsDialogClose"
+    />
+
     <!-- Advanced search guide dialog -->
     <advancedSearchGuideDialog
       :dialog-trigger="advancedSearchGuideDialogTrigger"
@@ -508,6 +514,20 @@
               </q-item-section>
             </q-item>
 
+             <q-item
+              @click="programTutorialsDialogAssignUID"
+              v-close-popup
+              clickable
+              active
+              active-class="bg-gunmetal-light text-cultured"
+              class="noHigh"
+              >
+              <q-item-section>Program tutorials</q-item-section>
+              <q-item-section avatar>
+                <q-icon name="mdi-book-open-page-variant" />
+              </q-item-section>
+            </q-item>
+
             <q-separator dark />
 
             <q-item
@@ -592,6 +612,7 @@ import repairProjectDialog from "src/components/dialogs/RepairProject.vue"
 import aboutAppDialog from "src/components/dialogs/AboutApp.vue"
 import changeLogDialog from "src/components/dialogs/ChangeLog.vue"
 import programSettingsDialog from "src/components/dialogs/ProgramSettings.vue"
+import programTutorialsDialog from "src/components/dialogs/ProgramTutorials.vue"
 import advancedSearchGuideDialog from "src/components/dialogs/AdvancedSearchGuide.vue"
 import newDocumentDialog from "src/components/dialogs/NewDocument.vue"
 import existingDocumentDialog from "src/components/dialogs/ExistingDocument.vue"
@@ -621,6 +642,7 @@ import appSearchBox from "src/components/appHeader/AppSearchBox.vue"
     changeLogDialog,
     advancedSearchGuideDialog,
     programSettingsDialog,
+    programTutorialsDialog,
     newDocumentDialog,
     existingDocumentDialog,
     tipsTricksTriviaDialog,
@@ -901,6 +923,19 @@ export default class AppControl extends BaseClass {
 
   programSettingsDialogAssignUID () {
     this.programSettingsDialogTrigger = this.generateUID()
+  }
+
+  /****************************************************************/
+  // Program tutorials dialog
+  /****************************************************************/
+
+  programTutorialsDialogTrigger: string | false = false
+  programTutorialsDialogClose () {
+    this.programTutorialsDialogTrigger = false
+  }
+
+  programTutorialsDialogAssignUID () {
+    this.programTutorialsDialogTrigger = this.generateUID()
   }
 
   /****************************************************************/

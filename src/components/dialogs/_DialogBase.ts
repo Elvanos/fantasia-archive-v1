@@ -61,4 +61,26 @@ export default class DialogBase extends BaseClass {
     width: "5px",
     opacity: 1
   }
+
+  /**
+ * Settings for the scrolling thumb of the scrollarea
+ */
+  thumbStyleTabs = {
+    right: "0px",
+    borderRadius: "5px",
+    backgroundColor: "#61a2bd",
+    width: "5px",
+    opacity: 1
+  }
+
+  /**
+* Settings for the scrolling thumb of the scrollarea
+*/
+  thumbStyleTutorialTabContent = {
+    right: "-55px",
+    borderRadius: "5px",
+    backgroundColor: "#61a2bd",
+    width: "5px",
+    opacity: 1
+  }
 }
